@@ -7,7 +7,7 @@ import java.util.Map;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
 
-import com.edvantis.rssreader.model.ItemGen;
+import com.edvantis.rssreader.model.NewsItem;
 import com.edvantis.rssreader.model.unews.com.ua.Item;
 import com.edvantis.rssreader.model.unews.com.ua.Rss;
 
@@ -20,9 +20,9 @@ public class RssTest {
 		Rss forObject = restTemplate.getForObject("http://u-news.com.ua/rss.xml", Rss.class);
 		//System.out.println(forObject.getChannel().getItem().toString());
 		Item[] item = forObject.getChannel().getItem();
-		List<ItemGen> news = new ArrayList<ItemGen>();
+		List<NewsItem> news = new ArrayList<NewsItem>();
 		for(int i=0; i<forObject.getChannel().getItem().length; i++){
-			ItemGen ig = new ItemGen();
+			NewsItem ig = new NewsItem();
 			ig.setTitle(item[i].getTitle());
 			ig.setDescription(item[i].getDescription());
 			ig.setLink(item[i].getLink());

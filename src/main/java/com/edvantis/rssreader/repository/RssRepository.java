@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import com.edvantis.rssreader.model.ItemGen;
+import com.edvantis.rssreader.model.NewsItem;
 
 @Repository
-public interface RssRepository extends MongoRepository<ItemGen, String> {
+public interface RssRepository extends MongoRepository<NewsItem, String> {
 	
-	public List<ItemGen> findBySource(String source);
+	public List<NewsItem> findBySource(String source);
 }

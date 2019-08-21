@@ -1,6 +1,5 @@
 package com.edvantis.rssreader.model;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
@@ -9,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Document
-public class ItemGen {
+public class NewsItem {
 
 	
 	
@@ -104,7 +103,7 @@ public class ItemGen {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ItemGen other = (ItemGen) obj;
+		NewsItem other = (NewsItem) obj;
 		if (description == null) {
 			if (other.description != null)
 				return false;
@@ -130,7 +129,5 @@ public class ItemGen {
     
 	
     
-
-	
     
 }
