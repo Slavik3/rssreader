@@ -7,15 +7,16 @@ import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
 
 import com.edvantis.rssreader.model.NewsItem;
-import com.edvantis.rssreader.model.mylondon.news.Item;
-import com.edvantis.rssreader.model.mylondon.news.Rss;
+import com.edvantis.rssreader.model.bbc.com.Item;
+import com.edvantis.rssreader.model.bbc.com.Rss;
 
 public class RssTest2 {
 	
 	@Test
 	public void testXmlMapping() {
 		RestTemplate restTemplate = new RestTemplate();
-		Rss forObject = restTemplate.getForObject("https://www.mylondon.news/news/?service=rss", Rss.class);
+		//https://www.huffpost.com/section/asian-voices/feed 403
+		Rss forObject = restTemplate.getForObject("https://feeds.bbci.co.uk/newsround/home/rss.xml", Rss.class);
 		//System.out.println(forObject.getChannel().getItem().toString());
 		Item[] item = forObject.getChannel().getItem();
 		List<NewsItem> news = new ArrayList<NewsItem>();
