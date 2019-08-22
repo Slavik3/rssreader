@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.edvantis.rssreader.controller.RssController;
 import com.edvantis.rssreader.repository.RssRepository;
+import com.edvantis.rssreader.services.FeedImporter;
 
 @SpringBootApplication
 public class BootMongoDBApp {
@@ -25,7 +26,9 @@ public class BootMongoDBApp {
 	}
 	
 	@Bean
-   public RestTemplate getRestTemplate() {
-      return new RestTemplate();
-   }
+	public RestTemplate getRestTemplate() {
+		return new RestTemplate();
+	}
+
+	
 }

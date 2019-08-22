@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Document
-public class NewsItem {
+public class NewsItem implements Comparable<NewsItem> {
 
 	
 	
@@ -18,7 +18,7 @@ public class NewsItem {
 	private String title;
 	private String description;
     private String link;
-    private String pubDate;
+    private Date pubDate;
     private String source;
 	private Date creationDate = new Date();
 
@@ -62,11 +62,11 @@ public class NewsItem {
         this.link = link;
     }
 
-    public String getPubDate() {
+    public Date getPubDate() {
         return pubDate;
     }
 
-    public void setPubDate(String pubDate) {
+    public void setPubDate(Date pubDate) {
         this.pubDate = pubDate;
     }
     
@@ -127,7 +127,9 @@ public class NewsItem {
 		return true;
 	}
     
-	
-    
+	@Override
+	public int compareTo(NewsItem o) {
+		return getPubDate().compareTo(o.getPubDate());
+	}
     
 }

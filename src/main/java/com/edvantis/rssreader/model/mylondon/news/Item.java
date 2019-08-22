@@ -1,5 +1,7 @@
 package com.edvantis.rssreader.model.mylondon.news;
 
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -17,7 +19,7 @@ public class Item {
 
 	private String category;
 
-	private String pubDate;
+	private Date pubDate;
 
 	public String getAuthor() {
 		return author;
@@ -67,11 +69,11 @@ public class Item {
 		this.category = category;
 	}
 
-	public String getPubDate() {
+	public Date getPubDate() {
 		return pubDate;
 	}
 
-	public void setPubDate(String pubDate) {
+	public void setPubDate(Date pubDate) {
 		this.pubDate = pubDate;
 	}
 

@@ -1,5 +1,7 @@
 package com.edvantis.rssreader.model.bbc.com;
 
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -12,7 +14,7 @@ public class Item {
 
 	private String title;
 
-	private String pubDate;
+	private Date pubDate;
 
 	public String getLink() {
 		return link;
@@ -46,11 +48,11 @@ public class Item {
 		this.title = title;
 	}
 
-	public String getPubDate() {
+	public Date getPubDate() {
 		return pubDate;
 	}
 
-	public void setPubDate(String pubDate) {
+	public void setPubDate(Date pubDate) {
 		this.pubDate = pubDate;
 	}
 

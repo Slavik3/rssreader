@@ -9,9 +9,11 @@ import com.edvantis.rssreader.model.NewsItem;
 import com.edvantis.rssreader.model.unews.com.ua.Item;
 import com.edvantis.rssreader.model.unews.com.ua.Rss;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 
-public class Util {
+public class FeedImporter {
+	
 	
     public static String getDomainName(String url) {
         URI uri = null;

@@ -25,6 +25,7 @@ public class RssTest2 {
 			ig.setTitle(item[i].getTitle());
 			ig.setDescription(item[i].getDescription());
 			ig.setPubDate(item[i].getPubDate());
+			System.out.println(item[i].getPubDate());
 			ig.setLink(item[i].getLink());
 			news.add(ig);
 		}
