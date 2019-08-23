@@ -3,17 +3,25 @@ package com.edvantis.rssreader.services;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import com.edvantis.rssreader.model.NewsItem;
 import com.edvantis.rssreader.model.unews.com.ua.Item;
 import com.edvantis.rssreader.model.unews.com.ua.Rss;
+import com.edvantis.rssreader.repository.RssRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+@Service
 public class FeedImporter {
 	
+	@Autowired
+	private static RssRepository rssRepository;
+
 	
     public static String getDomainName(String url) {
         URI uri = null;
@@ -43,5 +51,13 @@ public class FeedImporter {
 		}
 		return news;
     }
+    
+    public static void addNews() {
+
+
+		
+    }
+    
+    
     
 }

@@ -10,8 +10,6 @@ public class Item {
 
 	private String description;
 
-	//private Guid guid;
-
 	private String title;
 
 	private Date pubDate;
@@ -31,14 +29,6 @@ public class Item {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	/*public Guid getGuid() {
-		return guid;
-	}
-
-	public void setGuid(Guid guid) {
-		this.guid = guid;
-	}*/
 
 	public String getTitle() {
 		return title;
