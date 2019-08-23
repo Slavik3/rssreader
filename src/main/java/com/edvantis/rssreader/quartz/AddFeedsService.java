@@ -1,42 +1,29 @@
-package com.edvantis.rssreader.controller;
+package com.edvantis.rssreader.quartz;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.Resource;
-
-import org.quartz.*;
-import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.edvantis.rssreader.model.NewsItem;
 import com.edvantis.rssreader.repository.RssRepository;
 import com.edvantis.rssreader.services.FeedImporter;
 
-@RestController
-public class QuartzJob implements Job {
+@Service
+public class AddFeedsService {
+	
 	@Autowired
 	private RssRepository rssRepository;
 	
 	private final Logger LOG = LoggerFactory.getLogger(getClass());
-	/*private final RssRepository rssRepository;
-
-	public QuartzJob(RssRepository rssRepository) {
-		this.rssRepository = rssRepository;
-	}*/
 	
-	
+	public void addFeeds() {
 
-	@Override
-	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		LOG.info("run");
 
 		List<NewsItem> allNewsFromRss = new ArrayList<NewsItem>();
@@ -64,8 +51,7 @@ public class QuartzJob implements Job {
 			rssRepository.saveAll(newsFromRssForAdd);
 		}
 
+	
 	}
-
-
 
 }

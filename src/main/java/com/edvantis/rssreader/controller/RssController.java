@@ -2,7 +2,6 @@ package com.edvantis.rssreader.controller;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.TimerTask;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.edvantis.rssreader.model.NewsItem;
 import com.edvantis.rssreader.repository.RssRepository;
-import com.edvantis.rssreader.services.FeedImporter;
 
 @RestController
 @RequestMapping(value = "/")
