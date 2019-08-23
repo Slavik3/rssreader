@@ -15,16 +15,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.edvantis.rssreader.model.NewsItem;
 import com.edvantis.rssreader.repository.RssRepository;
 import com.edvantis.rssreader.services.FeedImporter;
 
-@Resource(name="someName")
-@Service
-@Configurable
-@Component("someName")
+@RestController
 public class QuartzJob implements Job {
+	@Autowired
+	private RssRepository rssRepository;
+	
 	private final Logger LOG = LoggerFactory.getLogger(getClass());
 	/*private final RssRepository rssRepository;
 
@@ -32,8 +33,7 @@ public class QuartzJob implements Job {
 		this.rssRepository = rssRepository;
 	}*/
 	
-	@Autowired 
-	private RssRepository rssRepository;
+	
 
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
@@ -49,7 +49,7 @@ public class QuartzJob implements Job {
 		allNewsFromRss.addAll(bbc);
 
 		if (rssRepository.findAll().size() == 0) {
-			rssRepository.save(allNewsFromRss);
+			rssRepository.saveAll(allNewsFromRss);
 		} else {
 			List<NewsItem> newsFromDB = rssRepository.findAll();
 			Collections.sort(newsFromDB);
@@ -61,7 +61,7 @@ public class QuartzJob implements Job {
 					newsFromRssForAdd.add(newsFromDB.get(i));
 				}
 			}
-			rssRepository.save(newsFromRssForAdd);
+			rssRepository.saveAll(newsFromRssForAdd);
 		}
 
 	}

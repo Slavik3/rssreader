@@ -42,7 +42,7 @@ public class BootMongoDBApp {
  
 			// specify job trigger
 			Trigger trigger = TriggerBuilder.newTrigger()
-					.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(5).repeatForever())
+					.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(10).repeatForever())
 					.build();
 			// Run every 5 seconds.
  
