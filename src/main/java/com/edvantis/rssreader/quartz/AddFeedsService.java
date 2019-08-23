@@ -20,6 +20,9 @@ public class AddFeedsService {
 	@Autowired
 	private RssRepository rssRepository;
 	
+	@Autowired
+	private FeedImporter feedImporter;
+	
 	private final Logger LOG = LoggerFactory.getLogger(getClass());
 	
 	public void addFeeds() {
@@ -27,9 +30,9 @@ public class AddFeedsService {
 		LOG.info("run");
 
 		List<NewsItem> allNewsFromRss = new ArrayList<NewsItem>();
-		List<NewsItem> mylondon = FeedImporter.getNews("https://www.mylondon.news/news/?service=rss");
-		List<NewsItem> uNews = FeedImporter.getNews("http://u-news.com.ua/rss.xml");
-		List<NewsItem> bbc = FeedImporter.getNews("https://feeds.bbci.co.uk/newsround/home/rss.xml");
+		List<NewsItem> mylondon = feedImporter.getNews("https://www.mylondon.news/news/?service=rss");
+		List<NewsItem> uNews = feedImporter.getNews("http://u-news.com.ua/rss.xml");
+		List<NewsItem> bbc = feedImporter.getNews("https://feeds.bbci.co.uk/newsround/home/rss.xml");
 
 		allNewsFromRss.addAll(mylondon);
 		allNewsFromRss.addAll(uNews);
