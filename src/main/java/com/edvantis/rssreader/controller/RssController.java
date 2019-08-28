@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,17 +17,14 @@ import com.edvantis.rssreader.model.NewsItem;
 import com.edvantis.rssreader.repository.RssRepository;
 
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "/feeds")
 public class RssController {
 	
 	private final Logger LOG = LoggerFactory.getLogger(getClass());
 
-	private final RssRepository rssRepository;
-
-	public RssController(RssRepository rssRepository) {
-		this.rssRepository = rssRepository;
-	}
-
+	@Autowired
+	private RssRepository rssRepository;
+	
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public NewsItem addNewItem(@RequestBody NewsItem item) {
 		LOG.info("Saving item.");

@@ -25,10 +25,7 @@ public class AddFeedsService {
 	
 	private final Logger LOG = LoggerFactory.getLogger(getClass());
 	
-	public void addFeeds() {
-
-		LOG.info("run");
-
+	public List<NewsItem> getFeeds() {
 		List<NewsItem> allNewsFromRss = new ArrayList<NewsItem>();
 		List<NewsItem> mylondon = feedImporter.getNews("https://www.mylondon.news/news/?service=rss");
 		List<NewsItem> uNews = feedImporter.getNews("http://u-news.com.ua/rss.xml");
@@ -37,14 +34,19 @@ public class AddFeedsService {
 		allNewsFromRss.addAll(mylondon);
 		allNewsFromRss.addAll(uNews);
 		allNewsFromRss.addAll(bbc);
-
+		return allNewsFromRss;
+	}
+	
+	
+	public void addFeeds() {
+		LOG.info("addFeeds");
+		List<NewsItem> allNewsFromRss = getFeeds();
 		if (rssRepository.findAll().size() == 0) {
 			rssRepository.saveAll(allNewsFromRss);
 		} else {
 			List<NewsItem> newsFromDB = rssRepository.findAll();
 			Collections.sort(newsFromDB);
 			Date lastDate = newsFromDB.get(newsFromDB.size() - 1).getPubDate();
-			System.out.println();
 			List<NewsItem> newsFromRssForAdd = new ArrayList<NewsItem>();
 			for (int i = 0; i < allNewsFromRss.size(); i++) {
 				if (newsFromDB.get(i).getPubDate().before(lastDate)) {
@@ -53,7 +55,6 @@ public class AddFeedsService {
 			}
 			rssRepository.saveAll(newsFromRssForAdd);
 		}
-
 	
 	}
 
