@@ -25,18 +25,22 @@ public class AddFeedsService {
 	
 	private final Logger LOG = LoggerFactory.getLogger(getClass());
 	
-	public List<NewsItem> getFeeds() {
-		List<NewsItem> allNewsFromRss = new ArrayList<NewsItem>();
-		List<NewsItem> mylondon = feedImporter.getNews("https://www.mylondon.news/news/?service=rss");
-		List<NewsItem> uNews = feedImporter.getNews("http://u-news.com.ua/rss.xml");
-		List<NewsItem> bbc = feedImporter.getNews("https://feeds.bbci.co.uk/newsround/home/rss.xml");
-
-		allNewsFromRss.addAll(mylondon);
-		allNewsFromRss.addAll(uNews);
-		allNewsFromRss.addAll(bbc);
-		return allNewsFromRss;
+	public List<String> getSourceURLs() {
+		List<String> sourceURL = null;
+		sourceURL.add("https://www.mylondon.news/news/?service=rss");
+		sourceURL.add("http://u-news.com.ua/rss.xml");
+		sourceURL.add("https://feeds.bbci.co.uk/newsround/home/rss.xml");
+		return sourceURL;
 	}
 	
+	public List<NewsItem> getFeeds() {
+		List<NewsItem> allNewsFromRss = new ArrayList<NewsItem>();
+		for(int i=0; i<getSourceURLs().size(); i++) {
+			List<NewsItem> items = feedImporter.getNews(getSourceURLs().get(i));
+			allNewsFromRss.addAll(items);
+		}
+		return allNewsFromRss;
+	}
 	
 	public void addFeeds() {
 		LOG.info("addFeeds");
