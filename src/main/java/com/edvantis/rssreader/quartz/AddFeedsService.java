@@ -1,9 +1,15 @@
 package com.edvantis.rssreader.quartz;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,11 +32,15 @@ public class AddFeedsService {
 	private final Logger LOG = LoggerFactory.getLogger(getClass());
 	
 	public List<String> getSourceURLs() {
-		List<String> sourceURL = new ArrayList<String>();
-		sourceURL.add("https://www.mylondon.news/news/?service=rss");
-		sourceURL.add("http://u-news.com.ua/rss.xml");
-		sourceURL.add("https://feeds.bbci.co.uk/newsround/home/rss.xml");
-		return sourceURL;
+		File file = new File("src/main/resources/sourceURLs");
+		String absolutePath = file.getAbsolutePath();
+		List<String> sourceURL = null;
+        try (Stream<String> lines = Files.lines(Paths.get(absolutePath))) {
+        	sourceURL = lines.collect(Collectors.toList());
+        } catch (IOException e) {
+			e.printStackTrace();
+		}
+        return sourceURL;
 	}
 	
 	public List<NewsItem> getFeeds() {
