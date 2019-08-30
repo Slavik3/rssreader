@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ConfigureAddFeedsJob {
 
-	/*@Bean
+	@Bean
 	public JobDetail jobADetails() {
 		return JobBuilder.newJob(AddFeedsJob.class).withIdentity("sampleJobA").storeDurably().build();
 	}
@@ -32,6 +32,6 @@ public class ConfigureAddFeedsJob {
 
 				.withIdentity("sampleTriggerB").withSchedule(CronScheduleBuilder.cronSchedule("0/5 * * ? * * *"))
 				.build();
-	}*/
+	}
 
 }
