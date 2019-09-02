@@ -25,11 +25,11 @@ public class RssController {
 	@Autowired
 	private RssRepository rssRepository;
 	
-	/*@RequestMapping(value = "/create", method = RequestMethod.POST)
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public NewsItem addNewItem(@RequestBody NewsItem item) {
 		LOG.info("Saving item.");
 		return rssRepository.save(item);
-	}*/
+	}
 	
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public List<NewsItem> getAllItems(@RequestParam(value ="source", required = false) String source) {

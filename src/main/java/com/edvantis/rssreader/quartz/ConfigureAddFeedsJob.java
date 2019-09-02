@@ -25,13 +25,13 @@ public class ConfigureAddFeedsJob {
 				.build();
 	}
 
-	@Bean
+	/*@Bean
 	public Trigger jobBTrigger(JobDetail jobBDetails) {
 
 		return TriggerBuilder.newTrigger().forJob(jobBDetails)
 
 				.withIdentity("sampleTriggerB").withSchedule(CronScheduleBuilder.cronSchedule("0/5 * * ? * * *"))
 				.build();
-	}
+	}*/
 
 }
