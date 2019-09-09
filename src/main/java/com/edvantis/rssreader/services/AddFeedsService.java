@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.edvantis.rssreader.exception.SyntaxException;
 import com.edvantis.rssreader.model.NewsItem;
 import com.edvantis.rssreader.model.Rss;
 import com.edvantis.rssreader.repository.RssRepository;
@@ -27,58 +28,59 @@ public class AddFeedsService {
 	static Logger log = Logger.getLogger(AddFeedsService.class.getName());
 	@Autowired
 	private RestTemplate restTemplate;
-	
+
 	@Autowired
 	private RssRepository rssRepository;
-    
-    public List<NewsItem> getNews(String url) {
+
+	public List<NewsItem> getNews(String url) throws SyntaxException {
 		Rss forObject = restTemplate.getForObject(url, Rss.class);
 		NewsItem[] item = forObject.getChannel().getItem();
 		List<NewsItem> news = new ArrayList<NewsItem>();
-		for(int i=0; i<forObject.getChannel().getItem().length; i++){
+		for (int i = 0; i < forObject.getChannel().getItem().length; i++) {
 			NewsItem ig = new NewsItem();
 			ig.setTitle(item[i].getTitle());
 			ig.setDescription(item[i].getDescription());
 			ig.setLink(item[i].getLink());
 			ig.setPubDate(item[i].getPubDate());
-			
+
 			URI uri = null;
 			try {
 				uri = new URI(url);
+
+				String domain = uri.getHost();
+				ig.setSource(domain);
+				news.add(ig);
 			} catch (URISyntaxException e) {
 				log.error(e);
+				throw new SyntaxException("incorrect URL");
 			}
-	        String domain = uri.getHost();
-			ig.setSource(domain);
-			news.add(ig);
 		}
 		return news;
-    }
-    
-    
+	}
+
 	public List<String> getSourceURLs() {
 		File file = new File("src/main/resources/sourceURLs");
 		String absolutePath = file.getAbsolutePath();
 		List<String> sourceURL = null;
-        try (Stream<String> lines = Files.lines(Paths.get(absolutePath))) {
-        	sourceURL = lines.collect(Collectors.toList());
-        } catch (IOException e) {
+		try (Stream<String> lines = Files.lines(Paths.get(absolutePath))) {
+			sourceURL = lines.collect(Collectors.toList());
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-        return sourceURL;
+		return sourceURL;
 	}
-	
-	public List<NewsItem> getFeeds() {
+
+	public List<NewsItem> getFeeds() throws SyntaxException {
 		List<NewsItem> allNewsFromRss = new ArrayList<NewsItem>();
-		for(int i=1; i<getSourceURLs().size(); i++) {
+		for (int i = 1; i < getSourceURLs().size(); i++) {
 			List<NewsItem> items = getNews(getSourceURLs().get(i));
 			allNewsFromRss.addAll(items);
 		}
 		return allNewsFromRss;
 	}
-	
-	public void addFeeds() {
-		//LOG.info("addFeeds");
+
+	public void addFeeds() throws SyntaxException {
+		// LOG.info("addFeeds");
 		List<NewsItem> allNewsFromRss = getFeeds();
 		if (rssRepository.findAll().size() == 0) {
 			rssRepository.saveAll(allNewsFromRss);
@@ -94,8 +96,7 @@ public class AddFeedsService {
 			}
 			rssRepository.saveAll(newsFromRssForAdd);
 		}
-	
+
 	}
-        
-    
+
 }

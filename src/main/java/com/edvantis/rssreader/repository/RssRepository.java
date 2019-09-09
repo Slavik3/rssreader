@@ -9,6 +9,6 @@ import com.edvantis.rssreader.model.NewsItem;
 
 @Repository
 public interface RssRepository extends MongoRepository<NewsItem, String> {
-	
+
 	public List<NewsItem> findBySource(String source);
 }

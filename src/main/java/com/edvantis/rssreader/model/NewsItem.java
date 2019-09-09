@@ -21,6 +21,23 @@ public class NewsItem implements Comparable<NewsItem> {
     private Date pubDate;
     private String source;
 	private Date creationDate = new Date();
+	
+	public NewsItem(){
+		
+	}
+
+	public NewsItem(String itemId, String title, String description, String link, Date pubDate, String source,
+			Date creationDate) {
+		super();
+		this.itemId = itemId;
+		this.title = title;
+		this.description = description;
+		this.link = link;
+		this.pubDate = pubDate;
+		this.source = source;
+		this.creationDate = creationDate;
+	}
+
 
 	public String getItemId() {
 		return itemId;

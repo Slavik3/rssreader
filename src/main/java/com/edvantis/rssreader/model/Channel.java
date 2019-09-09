@@ -23,6 +23,4 @@ public class Channel {
 		return "Channel [item=" + Arrays.toString(item) + "]";
 	}
 
-	
-	
 }
