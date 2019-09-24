@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.edvantis.rssreader.annotation.LogExecutionTime;
 import com.edvantis.rssreader.model.NewsItem;
 import com.edvantis.rssreader.repository.RssRepository;
 
@@ -27,12 +28,14 @@ public class RssController {
 	@Autowired
 	private RssRepository rssRepository;
 
+	@LogExecutionTime
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public NewsItem addNewItem(@RequestBody NewsItem item) {
 		LOG.info("Saving item.");
 		return rssRepository.save(item);
 	}
 
+	@LogExecutionTime
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public List<NewsItem> getAllItems(@RequestParam(value = "source", required = false) String source) {
 		LOG.info("Getting all items.");
@@ -43,12 +46,14 @@ public class RssController {
 		}
 	}
 
+	@LogExecutionTime
 	@RequestMapping(value = "/{itemId}", method = RequestMethod.GET)
 	public Optional<NewsItem> getItem(@PathVariable String itemId) {
 		LOG.info("Getting item with ID: {}.", itemId);
 		return rssRepository.findById(itemId);
 	}
 
+	@LogExecutionTime
 	@RequestMapping(value = "/{itemId}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteItem(@PathVariable String itemId) {
 		rssRepository.deleteById(itemId);
