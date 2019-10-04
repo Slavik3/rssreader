@@ -20,6 +20,7 @@ public class AddFeedsJob implements Job {
 		} catch (SyntaxException e) {
 			e.printStackTrace();
 		}
+		System.out.println();
 	}
 
 }

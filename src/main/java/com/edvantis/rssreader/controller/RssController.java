@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.edvantis.rssreader.annotation.LogExecutionTime;
 import com.edvantis.rssreader.model.NewsItem;
+import com.edvantis.rssreader.model.Source;
 import com.edvantis.rssreader.repository.RssRepository;
+import com.edvantis.rssreader.repository.SourceRepository;
 
 @RestController
 @RequestMapping(value = "/feeds")
@@ -27,6 +29,8 @@ public class RssController {
 
 	@Autowired
 	private RssRepository rssRepository;
+	@Autowired
+	private SourceRepository sourceRepository;
 
 	@LogExecutionTime
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -58,6 +62,20 @@ public class RssController {
 	public ResponseEntity<?> deleteItem(@PathVariable String itemId) {
 		rssRepository.deleteById(itemId);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/addSource", method = RequestMethod.POST)
+	public Source addSource(@RequestBody Source source) {
+		LOG.info("addSource");
+		System.out.println("source==> " + source);
+		return sourceRepository.save(source);
+	}
+	
+	@RequestMapping(value = "getSource", method = RequestMethod.GET)
+	public List<Source> getAllSources(@RequestParam(value = "source", required = false) String source) {
+		LOG.info("");
+		return sourceRepository.findAll();
+		
 	}
 
 }

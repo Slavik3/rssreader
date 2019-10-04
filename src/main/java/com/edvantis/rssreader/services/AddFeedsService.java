@@ -1,22 +1,17 @@
 package com.edvantis.rssreader.services;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.edvantis.rssreader.exception.SyntaxException;
 import com.edvantis.rssreader.model.NewsItem;
 import com.edvantis.rssreader.model.Rss;
 import com.edvantis.rssreader.repository.RssRepository;
+import com.edvantis.rssreader.repository.SourceRepository;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +26,9 @@ public class AddFeedsService {
 
 	@Autowired
 	private RssRepository rssRepository;
+	
+	@Autowired
+	private SourceRepository sourceRepository;
 
 	public List<NewsItem> getNews(String url) throws SyntaxException {
 		Rss forObject = restTemplate.getForObject(url, Rss.class);
@@ -59,20 +57,16 @@ public class AddFeedsService {
 	}
 
 	public List<String> getSourceURLs() {
-		File file = new File("src/main/resources/sourceURLs");
-		String absolutePath = file.getAbsolutePath();
-		List<String> sourceURL = null;
-		try (Stream<String> lines = Files.lines(Paths.get(absolutePath))) {
-			sourceURL = lines.collect(Collectors.toList());
-		} catch (IOException e) {
-			e.printStackTrace();
+		List<String> sourceURL = new ArrayList<String>();
+		for(int i=0; i<sourceRepository.findAll().size(); i++) {
+			sourceURL.add(sourceRepository.findAll().get(i).getSourceURL());
 		}
 		return sourceURL;
 	}
 
 	public List<NewsItem> getFeeds() throws SyntaxException {
 		List<NewsItem> allNewsFromRss = new ArrayList<NewsItem>();
-		for (int i = 1; i < getSourceURLs().size(); i++) {
+		for (int i = 0; i < getSourceURLs().size(); i++) {
 			List<NewsItem> items = getNews(getSourceURLs().get(i));
 			allNewsFromRss.addAll(items);
 		}
