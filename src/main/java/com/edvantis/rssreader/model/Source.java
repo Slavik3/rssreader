@@ -1,9 +1,16 @@
 package com.edvantis.rssreader.model;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Document
 public class Source {
+	
+	@JsonProperty("_id")
+	@Id
+	private String id;
 	private String sourceURL;
 	private String title;
 	private String description;
@@ -11,6 +18,12 @@ public class Source {
 	private String pubDate;
 	private String source;
 	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public String getSourceURL() {
 		return sourceURL;
 	}
@@ -48,8 +61,10 @@ public class Source {
 		this.source = source;
 	}
 	
-	public Source(String sourceURL, String title, String description, String link, String pubDate, String source) {
+	public Source(String id, String sourceURL, String title, String description, String link, String pubDate,
+			String source) {
 		super();
+		this.id = id;
 		this.sourceURL = sourceURL;
 		this.title = title;
 		this.description = description;
@@ -60,8 +75,10 @@ public class Source {
 	
 	@Override
 	public String toString() {
-		return "Source [sourceURL=" + sourceURL + ", title=" + title + ", description=" + description + ", link=" + link
-				+ ", pubDate=" + pubDate + ", source=" + source + "]";
+		return "Source [id=" + id + ", sourceURL=" + sourceURL + ", title=" + title + ", description=" + description
+				+ ", link=" + link + ", pubDate=" + pubDate + ", source=" + source + "]";
 	}
+	
+	
 	
 }

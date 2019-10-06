@@ -7,5 +7,6 @@ import com.edvantis.rssreader.model.Source;
 
 @Repository
 public interface SourceRepository extends MongoRepository<Source, String> {
+	public Source findBySourceURL(String sourceURL);
 
 }
