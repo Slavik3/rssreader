@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.edvantis.rssreader.annotation.LogExecutionTime;
 import com.edvantis.rssreader.model.NewsItem;
-import com.edvantis.rssreader.model.Source;
 import com.edvantis.rssreader.repository.RssRepository;
-import com.edvantis.rssreader.repository.SourceRepository;
 
 @RestController
 @RequestMapping(value = "/feeds")
@@ -31,8 +29,6 @@ public class RssController {
 
 	@Autowired
 	private RssRepository rssRepository;
-	@Autowired
-	private SourceRepository sourceRepository;
 
 	@LogExecutionTime
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -66,21 +62,6 @@ public class RssController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/addSource", method = RequestMethod.POST)
-	public Source addSource(@RequestBody Source source) throws URISyntaxException {
-		LOG.info("addSource");
-		URI uri = null;
-		uri = new URI(source.getSourceURL());
-		String domain = uri.getHost();
-		source.setHostname(domain);
-		return sourceRepository.save(source);
-	}
 	
-	@RequestMapping(value = "getSource", method = RequestMethod.GET)
-	public List<Source> getAllSources(@RequestParam(value = "source", required = false) String source) {
-		LOG.info("");
-		return sourceRepository.findAll();
-		
-	}
 
 }

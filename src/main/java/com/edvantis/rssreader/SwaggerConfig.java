@@ -35,8 +35,8 @@ public class SwaggerConfig {
 					.apiInfo(apiInfo)
 					.apiVersion("1.0")
 					.includePatterns("/feeds/*.*");
-		/*
-		swaggerSpringMvcPlugin.useDefaultResponseMessages(false);*/
+		
+		swaggerSpringMvcPlugin.useDefaultResponseMessages(false);
 		
 	    return swaggerSpringMvcPlugin;
 	}
