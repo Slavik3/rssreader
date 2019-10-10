@@ -1,5 +1,7 @@
 package com.edvantis.rssreader.controller;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,9 +67,12 @@ public class RssController {
 	}
 	
 	@RequestMapping(value = "/addSource", method = RequestMethod.POST)
-	public Source addSource(@RequestBody Source source) {
+	public Source addSource(@RequestBody Source source) throws URISyntaxException {
 		LOG.info("addSource");
-		System.out.println("source==> " + source);
+		URI uri = null;
+		uri = new URI(source.getSourceURL());
+		String domain = uri.getHost();
+		source.setHostname(domain);
 		return sourceRepository.save(source);
 	}
 	

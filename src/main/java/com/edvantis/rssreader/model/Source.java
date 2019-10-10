@@ -16,7 +16,7 @@ public class Source {
 	private String description;
 	private String link;
 	private String pubDate;
-	private String source;
+	private String hostname;
 	
 	public String getId() {
 		return id;
@@ -54,15 +54,15 @@ public class Source {
 	public void setPubDate(String pubDate) {
 		this.pubDate = pubDate;
 	}
-	public String getSource() {
-		return source;
+	public String getHostname() {
+		return hostname;
 	}
-	public void setSource(String source) {
-		this.source = source;
+	public void setHostname(String hostname) {
+		this.hostname = hostname;
 	}
 	
 	public Source(String id, String sourceURL, String title, String description, String link, String pubDate,
-			String source) {
+			String hostname) {
 		super();
 		this.id = id;
 		this.sourceURL = sourceURL;
@@ -70,13 +70,13 @@ public class Source {
 		this.description = description;
 		this.link = link;
 		this.pubDate = pubDate;
-		this.source = source;
+		this.hostname = hostname;
 	}
 	
 	@Override
 	public String toString() {
 		return "Source [id=" + id + ", sourceURL=" + sourceURL + ", title=" + title + ", description=" + description
-				+ ", link=" + link + ", pubDate=" + pubDate + ", source=" + source + "]";
+				+ ", link=" + link + ", pubDate=" + pubDate + ", hostname=" + hostname + "]";
 	}
 	
 	
