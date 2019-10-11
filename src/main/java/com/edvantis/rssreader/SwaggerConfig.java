@@ -34,7 +34,7 @@ public class SwaggerConfig {
 		swaggerSpringMvcPlugin
 					.apiInfo(apiInfo)
 					.apiVersion("1.0")
-					.includePatterns("/feeds/*.*");
+					.includePatterns("/feeds/*.*", "/addSource", "/getSource");
 		
 		swaggerSpringMvcPlugin.useDefaultResponseMessages(false);
 		

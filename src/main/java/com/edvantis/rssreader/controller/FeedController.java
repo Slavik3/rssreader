@@ -1,7 +1,5 @@
 package com.edvantis.rssreader.controller;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,10 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.edvantis.rssreader.annotation.LogExecutionTime;
 import com.edvantis.rssreader.model.NewsItem;
 import com.edvantis.rssreader.repository.RssRepository;
+import com.wordnik.swagger.annotations.Api;
 
 @RestController
 @RequestMapping(value = "/feeds")
-public class RssController {
+@Api(value = "feeds", description = "Feeds API")
+public class FeedController {
 
 	private final Logger LOG = LoggerFactory.getLogger(getClass());
 

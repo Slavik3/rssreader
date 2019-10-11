@@ -19,14 +19,14 @@ public class NewsItem implements Comparable<NewsItem> {
 	private String description;
     private String link;
     private Date pubDate;
-    private String hostname;
+    private String source;
 	private Date creationDate = new Date();
 	
 	public NewsItem(){
 		
 	}
 
-	public NewsItem(String itemId, String title, String description, String link, Date pubDate, String hostname,
+	public NewsItem(String itemId, String title, String description, String link, Date pubDate, String source,
 			Date creationDate) {
 		super();
 		this.itemId = itemId;
@@ -34,7 +34,7 @@ public class NewsItem implements Comparable<NewsItem> {
 		this.description = description;
 		this.link = link;
 		this.pubDate = pubDate;
-		this.hostname = hostname;
+		this.source = source;
 		this.creationDate = creationDate;
 	}
 
@@ -88,17 +88,17 @@ public class NewsItem implements Comparable<NewsItem> {
     }
     
     public String getSource() {
-        return hostname;
+        return source;
     }
 
     public void setSource(String source) {
-        this.hostname = source;
+        this.source = source;
     }
 
 	@Override
 	public String toString() {
 		return "ItemGen [itemId=" + itemId + ", title=" + title + ", description=" + description + ", link=" + link
-				+ ", pubDate=" + pubDate + ", hostname=" + hostname + ", creationDate=" + creationDate + "]";
+				+ ", pubDate=" + pubDate + ", source=" + source + ", creationDate=" + creationDate + "]";
 	}
 
 	@Override
