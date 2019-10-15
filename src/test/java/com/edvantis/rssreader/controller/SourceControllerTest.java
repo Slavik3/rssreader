@@ -46,16 +46,12 @@ public class SourceControllerTest {
 				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 		this.mockMvc.perform(get("/getSource").accept(MediaType.APPLICATION_JSON))
 		.andExpect(status().isOk())
-		.andExpect(jsonPath("$[0].sourceURL").value("https://hnrss.org/newest"));
+		.andExpect(jsonPath("$[0].sourceURL").value("https://hnrss.org/newest"))
+		.andExpect(jsonPath("$[0].title").value("title"))
+		.andExpect(jsonPath("$[0].description").value("description"))
+		.andExpect(jsonPath("$[0].link").value("link"))
+		.andExpect(jsonPath("$[0].pubDate").value("pubDate"));
 		
 	}
 	
-	@Test
-	public void getSourceeRestTest() throws Exception {
-		this.mockMvc.perform(get("/getSource").accept(MediaType.APPLICATION_JSON))
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$[0].sourceURL").value("https://hnrss.org/newest"));
-
-	}
-
 }

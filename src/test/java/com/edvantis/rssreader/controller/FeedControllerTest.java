@@ -3,7 +3,6 @@ package com.edvantis.rssreader.controller;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -26,9 +25,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class FeedControllerTest {
 
 	private MockMvc mockMvc;
-
-	@InjectMocks
-	private FeedController userController;
+	
 	@Autowired
 	private WebApplicationContext wac;
 
@@ -38,7 +35,7 @@ public class FeedControllerTest {
 	}
 
 	@Test
-	public void createFeedsRestTest() throws Exception {
+	public void getFeedsRestTest() throws Exception {
 		String json = "{\"id\" : \"1\", "
 				+ "\"title\" : \"Police want to find this man suspected of sexual assault on Clapton bus\", "
 				+ "\"link\" : \"https://www.mylondon.news/news/east-london-news/police-want-find-man-suspected-16883138\", \"source\" : \"mylondon.news\"}";
@@ -54,15 +51,12 @@ public class FeedControllerTest {
 				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 		this.mockMvc.perform(post("/feeds/create").contentType(MediaType.APPLICATION_JSON).content(json3)
 				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-	}
-
-	@Test
-	public void getFeedsRestTest() throws Exception {
+		
 		this.mockMvc.perform(get("/feeds"))
-				.andExpect(jsonPath("$[0].title").value("Police want to find this man suspected of sexual assault on Clapton bus"))
-				.andExpect(jsonPath("$[1].title").value("Eerie pictures show the sunken South London ship where the Beatles once played"))
-				.andExpect(jsonPath("$[2].title").value("Amber Rudd: Cabinet minister quits her job in the government"))
-				.andExpect(status().isOk());
+		.andExpect(jsonPath("$[0].title").value("Police want to find this man suspected of sexual assault on Clapton bus"))
+		.andExpect(jsonPath("$[1].title").value("Eerie pictures show the sunken South London ship where the Beatles once played"))
+		.andExpect(jsonPath("$[2].title").value("Amber Rudd: Cabinet minister quits her job in the government"))
+		.andExpect(status().isOk());
 	}
 	
 	@Test
