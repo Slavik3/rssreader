@@ -1,27 +1,27 @@
 package com.edvantis.rssreader.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Document
+
+@Table(name = "source")
+@Entity
 public class Source {
 	
-	@JsonProperty("_id")
 	@Id
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 	private String sourceURL;
 	private String title;
 	private String description;
 	private String link;
-	private String pubDate;
+	private String pub_date;//TODO ?
 	private String hostname;
 	
-	public String getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getSourceURL() {
@@ -49,10 +49,10 @@ public class Source {
 		this.link = link;
 	}
 	public String getPubDate() {
-		return pubDate;
+		return pub_date;
 	}
-	public void setPubDate(String pubDate) {
-		this.pubDate = pubDate;
+	public void setPub_date(String pub_date) {
+		this.pub_date = pub_date;
 	}
 	public String getHostname() {
 		return hostname;
@@ -61,7 +61,11 @@ public class Source {
 		this.hostname = hostname;
 	}
 	
-	public Source(String id, String sourceURL, String title, String description, String link, String pubDate,
+	public Source() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public Source(int id, String sourceURL, String title, String description, String link, String pub_date,
 			String hostname) {
 		super();
 		this.id = id;
@@ -69,14 +73,14 @@ public class Source {
 		this.title = title;
 		this.description = description;
 		this.link = link;
-		this.pubDate = pubDate;
+		this.pub_date = pub_date;
 		this.hostname = hostname;
 	}
 	
 	@Override
 	public String toString() {
 		return "Source [id=" + id + ", sourceURL=" + sourceURL + ", title=" + title + ", description=" + description
-				+ ", link=" + link + ", pubDate=" + pubDate + ", hostname=" + hostname + "]";
+				+ ", link=" + link + ", pubDate=" + ", hostname=" + hostname + "]";
 	}
 	
 	

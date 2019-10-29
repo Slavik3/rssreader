@@ -2,49 +2,50 @@ package com.edvantis.rssreader.model;
 
 import java.util.Date;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Document
+@Entity
 public class NewsItem implements Comparable<NewsItem> {
 
 	
 	
-	@JsonProperty("_id")
 	@Id
-	private String itemId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 	private String title;
 	private String description;
     private String link;
-    private Date pubDate;
+    private Date pub_date;
     private String source;
-	private Date creationDate = new Date();
+	private Date creation_date = new Date();
 	
 	public NewsItem(){
 		
 	}
 
-	public NewsItem(String itemId, String title, String description, String link, Date pubDate, String source,
-			Date creationDate) {
+	public NewsItem(int id, String title, String description, String link, Date pubDate, String source,
+			Date creation_date) {
 		super();
-		this.itemId = itemId;
+		this.id = id;
 		this.title = title;
 		this.description = description;
 		this.link = link;
-		this.pubDate = pubDate;
+		this.pub_date = pubDate;
 		this.source = source;
-		this.creationDate = creationDate;
+		this.creation_date = creation_date;
 	}
 
 
-	public String getItemId() {
-		return itemId;
+	public int getId() {
+		return id;
 	}
 
-	public void setItemId(String itemId) {
-		this.itemId = itemId;
+	public void setItemId(int id) {
+		this.id = id;
 	}
 
 	public String getTitle() {
@@ -56,11 +57,11 @@ public class NewsItem implements Comparable<NewsItem> {
     }
 
 	public Date getCreationDate() {
-		return creationDate;
+		return creation_date;
 	}
 
 	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
+		this.creation_date = creationDate;
 	}
 	
 	public String getDescription() {
@@ -80,11 +81,11 @@ public class NewsItem implements Comparable<NewsItem> {
     }
 
     public Date getPubDate() {
-        return pubDate;
+        return pub_date;
     }
 
     public void setPubDate(Date pubDate) {
-        this.pubDate = pubDate;
+        this.pub_date = pubDate;
     }
     
     public String getSource() {
@@ -97,8 +98,8 @@ public class NewsItem implements Comparable<NewsItem> {
 
 	@Override
 	public String toString() {
-		return "ItemGen [itemId=" + itemId + ", title=" + title + ", description=" + description + ", link=" + link
-				+ ", pubDate=" + pubDate + ", source=" + source + ", creationDate=" + creationDate + "]";
+		return "ItemGen [id=" + id + ", title=" + title + ", description=" + description + ", link=" + link
+				+ ", pubDate=" + pub_date + ", source=" + source + ", creationDate=" + creation_date + "]";
 	}
 
 	@Override
@@ -107,7 +108,7 @@ public class NewsItem implements Comparable<NewsItem> {
 		int result = 1;
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((link == null) ? 0 : link.hashCode());
-		result = prime * result + ((pubDate == null) ? 0 : pubDate.hashCode());
+		result = prime * result + ((pub_date == null) ? 0 : pub_date.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		return result;
 	}
@@ -131,10 +132,10 @@ public class NewsItem implements Comparable<NewsItem> {
 				return false;
 		} else if (!link.equals(other.link))
 			return false;
-		if (pubDate == null) {
-			if (other.pubDate != null)
+		if (pub_date == null) {
+			if (other.pub_date != null)
 				return false;
-		} else if (!pubDate.equals(other.pubDate))
+		} else if (!pub_date.equals(other.pub_date))
 			return false;
 		if (title == null) {
 			if (other.title != null)

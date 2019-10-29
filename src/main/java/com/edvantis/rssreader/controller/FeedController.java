@@ -2,6 +2,7 @@ package com.edvantis.rssreader.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +42,9 @@ public class FeedController {
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public List<NewsItem> getAllItems(@RequestParam(value = "source", required = false) String source) {
 		LOG.info("Getting all items.");
-		if (source != null) {
+		if(source==""){
+			return rssRepository.findAll();
+		}else if (source != null) {
 			return rssRepository.findBySource(source);
 		} else {
 			return rssRepository.findAll();
@@ -60,6 +63,20 @@ public class FeedController {
 	public ResponseEntity<?> deleteItem(@PathVariable String itemId) {
 		rssRepository.deleteById(itemId);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	
+	@LogExecutionTime
+	@RequestMapping(value = "/src", method = RequestMethod.GET)
+	public Stream<String> getSrc() {
+		/*Set<String> src = new HashSet<String>();
+		List<NewsItem> ni = rssRepository.findAll();
+		for(int i=0; i<ni.size(); i++){
+			src.add(ni.get(i).getSource());
+		}
+		return src;*/
+		
+		return rssRepository.findAll().stream().map(item->item.getSource()).distinct();
 	}
 	
 	
