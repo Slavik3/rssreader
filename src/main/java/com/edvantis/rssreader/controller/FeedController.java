@@ -67,7 +67,7 @@ public class FeedController {
 	
 	
 	@LogExecutionTime
-	@RequestMapping(value = "/src", method = RequestMethod.GET)
+	@RequestMapping(value = "/srcOfNews", method = RequestMethod.GET)
 	public Stream<String> getSrc() {
 		/*Set<String> src = new HashSet<String>();
 		List<NewsItem> ni = rssRepository.findAll();

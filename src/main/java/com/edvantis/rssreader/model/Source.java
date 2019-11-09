@@ -15,7 +15,8 @@ public class Source {
 	private String title;
 	private String description;
 	private String link;
-	private String pub_date;//TODO ?
+	@Column(name = "pub_date")
+	private String pubDate;//TODO ?
 	private String hostname;
 	
 	public int getId() {
@@ -49,10 +50,10 @@ public class Source {
 		this.link = link;
 	}
 	public String getPubDate() {
-		return pub_date;
+		return pubDate;
 	}
 	public void setPub_date(String pub_date) {
-		this.pub_date = pub_date;
+		this.pubDate = pub_date;
 	}
 	public String getHostname() {
 		return hostname;
@@ -73,7 +74,7 @@ public class Source {
 		this.title = title;
 		this.description = description;
 		this.link = link;
-		this.pub_date = pub_date;
+		this.pubDate = pub_date;
 		this.hostname = hostname;
 	}
 	
