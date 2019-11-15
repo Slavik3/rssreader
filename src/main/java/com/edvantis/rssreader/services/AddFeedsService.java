@@ -88,7 +88,7 @@ public class AddFeedsService {
 	}
 
 	public void addFeeds() throws SyntaxException {
-		// LOG.info("addFeeds");
+		log.info("addFeeds");
 		List<NewsItem> allNewsFromRss = getFeeds();
 		if (rssRepository.findAll().size() == 0) {
 			rssRepository.saveAll(allNewsFromRss);
@@ -96,12 +96,15 @@ public class AddFeedsService {
 			List<NewsItem> newsFromDB = rssRepository.findAll();
 			Collections.sort(newsFromDB);
 			Date lastDate = newsFromDB.get(newsFromDB.size() - 1).getPubDate();
+			log.info("lastDate==> " + lastDate);
+			log.info("lastDate==> " + lastDate.getTime());
 			List<NewsItem> newsFromRssForAdd = new ArrayList<NewsItem>();
 			for (int i = 0; i < allNewsFromRss.size(); i++) {
-				if (newsFromDB.get(i).getPubDate().before(lastDate)) {
-					newsFromRssForAdd.add(newsFromDB.get(i));
+				if (allNewsFromRss.get(i).getPubDate().getTime()>(lastDate.getTime())) {
+					newsFromRssForAdd.add(allNewsFromRss.get(i));
 				}
 			}
+			log.info(newsFromRssForAdd.toString());
 			rssRepository.saveAll(newsFromRssForAdd);
 		}
 

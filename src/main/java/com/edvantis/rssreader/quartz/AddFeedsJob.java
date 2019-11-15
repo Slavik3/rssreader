@@ -1,5 +1,8 @@
 package com.edvantis.rssreader.quartz;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +18,11 @@ public class AddFeedsJob implements Job {
 
 	@Override
 	public void execute(JobExecutionContext arg0) {
+		
+		Date date = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		System.out.println(formatter.format(date));
+		
 		try {
 			feedImporter.addFeeds();
 		} catch (SyntaxException e) {

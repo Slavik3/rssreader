@@ -13,18 +13,14 @@ public class ConfigureAddFeedsJob {
 
 	@Bean
 	public JobDetail jobADetails() {
-		return JobBuilder.newJob(AddFeedsJob.class).withIdentity("sampleJobA").storeDurably().build();
+		return JobBuilder.newJob(AddFeedsJob.class).withIdentity("Add feeds job").storeDurably().build();
 	}
 
 	@Bean
 	public Trigger jobATrigger(JobDetail jobADetails) {
-
 		return TriggerBuilder.newTrigger().forJob(jobADetails)
-
-				.withIdentity("sampleTriggerA").withSchedule(CronScheduleBuilder.cronSchedule("0 0 * ? * *"))
+				.withIdentity("hour trigger").withSchedule(CronScheduleBuilder.cronSchedule("0 0 * ? * *"))
 				.build();
 	}
-
-
 
 }

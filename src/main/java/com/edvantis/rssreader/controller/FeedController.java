@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.edvantis.rssreader.annotation.LogExecutionTime;
+import com.edvantis.rssreader.exception.SyntaxException;
 import com.edvantis.rssreader.model.NewsItem;
 import com.edvantis.rssreader.repository.RssRepository;
+import com.edvantis.rssreader.services.AddFeedsService;
 import com.wordnik.swagger.annotations.Api;
 
 @RestController
@@ -30,6 +32,8 @@ public class FeedController {
 
 	@Autowired
 	private RssRepository rssRepository;
+	@Autowired
+	private AddFeedsService addFeedsService;
 
 	@LogExecutionTime
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -77,6 +81,11 @@ public class FeedController {
 		return src;*/
 		
 		return rssRepository.findAll().stream().map(item->item.getSource()).distinct();
+	}
+	
+	@RequestMapping(value = "/upload", method = RequestMethod.POST)
+	public void upload(@RequestParam(value = "source", required = false) String source) throws SyntaxException {
+		addFeedsService.addFeeds();
 	}
 	
 	
