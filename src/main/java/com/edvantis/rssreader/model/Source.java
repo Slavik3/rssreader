@@ -18,6 +18,7 @@ public class Source {
 	@Column(name = "pub_date")
 	private String pubDate;//TODO ?
 	private String hostname;
+	@Column(name = "is_active")
 	private Boolean isActive;
 	
 	public int getId() {

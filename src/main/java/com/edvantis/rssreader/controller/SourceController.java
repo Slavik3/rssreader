@@ -60,6 +60,7 @@ public class SourceController {
 	@RequestMapping(value="/sources/{id}", method=RequestMethod.PUT)
 	public ResponseEntity<?> update(@RequestBody Source source) {
 		LOG.info("update source");
+		LOG.info(source.toString());
 		sourceRepository.save(source);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

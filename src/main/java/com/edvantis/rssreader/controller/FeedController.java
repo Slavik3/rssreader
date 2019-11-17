@@ -85,8 +85,16 @@ public class FeedController {
 	
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	public void upload(@RequestParam(value = "source", required = false) String source) throws SyntaxException {
-		addFeedsService.addFeeds();
+		LOG.info("upload");
+		LOG.info("source==> " + source);
+		if(source==null || source.equals("undefined")){
+			addFeedsService.addFeeds();
+		} else {
+			addFeedsService.addFeeds(source);
+		}
+		
 	}
+	
 	
 	
 
