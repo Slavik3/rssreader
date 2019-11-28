@@ -7,7 +7,6 @@ import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.edvantis.rssreader.exception.SyntaxException;
 import com.edvantis.rssreader.services.AddFeedsService;
 
 @RestController

@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import com.edvantis.rssreader.exception.SyntaxException;
 import com.edvantis.rssreader.model.NewsItem;
 import com.edvantis.rssreader.model.Source;
 import com.edvantis.rssreader.repository.RssRepository;
@@ -36,7 +35,7 @@ public class AddFeedsService {
 	@Autowired
 	private SourceRepository sourceRepository;
 
-	public List<NewsItem> getNews(String url) throws SyntaxException {
+	public List<NewsItem> getNews(String url) {
 		List<NewsItem> news = new ArrayList<NewsItem>();
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -85,12 +84,10 @@ public class AddFeedsService {
 		List<NewsItem> allNewsFromRss = new ArrayList<NewsItem>();
 		for (int i = 0; i < getActiveSourceURLs().size(); i++) {
 			List<NewsItem> items = null;
-			try {
+			
 				items = getNews(getActiveSourceURLs().get(i));
-			} catch (SyntaxException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
+				
 			allNewsFromRss.addAll(items);
 		}
 		return allNewsFromRss;
@@ -103,13 +100,7 @@ public class AddFeedsService {
 		System.out.println("==> " + source);
 		if (source.getIsActive() != false) {
 			// sourceURL = sourceRepository.findBySourceURL(sourceURL).getSourceURL();
-			List<NewsItem> items = null;
-			try {
-				items = getNews(source.getSourceURL());
-			} catch (SyntaxException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			List<NewsItem> items = getNews(source.getSourceURL());
 			allNewsFromRss.addAll(items);
 		}
 		return allNewsFromRss;

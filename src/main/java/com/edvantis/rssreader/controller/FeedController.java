@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.edvantis.rssreader.annotation.LogExecutionTime;
-import com.edvantis.rssreader.exception.SyntaxException;
 import com.edvantis.rssreader.model.NewsItem;
 import com.edvantis.rssreader.repository.RssRepository;
 import com.edvantis.rssreader.services.AddFeedsService;
