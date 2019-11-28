@@ -36,17 +36,17 @@ public class SourceControllerTest {
 	
 	@Test
 	public void createSourceRestTest() throws Exception {
-		String json = "{\"sourceURL\" : \"https://hnrss.org/newest\", "
+		String json = "{\"sourceURL\" : \"https://www.mylondon.news/news/?service=rss\", "
 				+ "\"title\" : \"title\", "
 				+ "\"description\" : \"description\", "
 				+ "\"link\" : \"link\", "
 				+ "\"pubDate\" : \"pubDate\"}";
 		
-		this.mockMvc.perform(post("/addSource").contentType(MediaType.APPLICATION_JSON).content(json)
+		this.mockMvc.perform(post("/sources/add").contentType(MediaType.APPLICATION_JSON).content(json)
 				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-		this.mockMvc.perform(get("/getSource").accept(MediaType.APPLICATION_JSON))
+		this.mockMvc.perform(get("/sources/getAll").accept(MediaType.APPLICATION_JSON))
 		.andExpect(status().isOk())
-		.andExpect(jsonPath("$[0].sourceURL").value("https://hnrss.org/newest"))
+		.andExpect(jsonPath("$[0].sourceURL").value("https://www.mylondon.news/news/?service=rss"))
 		.andExpect(jsonPath("$[0].title").value("title"))
 		.andExpect(jsonPath("$[0].description").value("description"))
 		.andExpect(jsonPath("$[0].link").value("link"))
