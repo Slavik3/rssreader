@@ -90,14 +90,20 @@ public class AddFeedsService {
 		return allNewsFromRss;
 	}
 
-	public List<NewsItem> getFeeds(String hostname) throws SyntaxException {
+	public List<NewsItem> getFeeds(String hostname) {
 		List<NewsItem> allNewsFromRss = new ArrayList<NewsItem>();
 		Source source = sourceRepository.findAll().stream().filter(p -> p.getHostname().equals(hostname)).findAny()
 				.orElse(null);
 		System.out.println("==> " + source);
 		if (source.getIsActive() != false) {
 			// sourceURL = sourceRepository.findBySourceURL(sourceURL).getSourceURL();
-			List<NewsItem> items = getNews(source.getSourceURL());
+			List<NewsItem> items = null;
+			try {
+				items = getNews(source.getSourceURL());
+			} catch (SyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			allNewsFromRss.addAll(items);
 		}
 		return allNewsFromRss;
@@ -126,9 +132,11 @@ public class AddFeedsService {
 
 	}
 
-	public void addFeeds(String sourceURL) throws SyntaxException {
+	public void addFeeds(String sourceURL) {
 		log.info("addFeeds");
+		log.info(sourceURL);
 		List<NewsItem> allNewsFromRss = getFeeds(sourceURL);
+		
 		if (rssRepository.findAll().size() == 0) {
 			rssRepository.saveAll(allNewsFromRss);
 		} else {

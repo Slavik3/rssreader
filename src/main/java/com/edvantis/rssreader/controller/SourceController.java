@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.edvantis.rssreader.exception.GetFeedsException;
+import com.edvantis.rssreader.model.NewsItem;
 import com.edvantis.rssreader.model.Source;
 import com.edvantis.rssreader.repository.SourceRepository;
+import com.edvantis.rssreader.services.AddFeedsService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 
@@ -31,15 +34,25 @@ public class SourceController {
 	@Autowired
 	private SourceRepository sourceRepository;
 	
+	@Autowired
+	private AddFeedsService addFeedsService;
+	
 	@ApiOperation(value = "Add new source")
 	@RequestMapping(value = "/sources/add", method = RequestMethod.POST)
-	public Source addSource(@RequestBody Source source) throws URISyntaxException {
+	public Source addSource(@RequestBody Source source) throws URISyntaxException, GetFeedsException {
 		LOG.info("Add new source");
 		URI uri = null;
 		uri = new URI(source.getSourceURL());
 		String domain = uri.getHost();
 		source.setHostname(domain);
-		return sourceRepository.save(source);
+		source.setIsActive(true);
+		Source src = sourceRepository.save(source);
+		List<NewsItem> feeds = addFeedsService.getFeeds(source.getHostname());//TODO 
+		if(feeds.size()==0) {
+			System.out.println("GetFeedsException");
+			throw new GetFeedsException("Can not get feeds from " + source.getHostname());
+		}
+		return src;
 	}
 	
 	@RequestMapping(value = "/sources/getAll", method = RequestMethod.GET)
