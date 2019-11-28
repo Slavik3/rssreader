@@ -16,8 +16,10 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.util.NestedServletException;
 
 import com.edvantis.rssreader.BootMongoDBApp;
+import com.edvantis.rssreader.exception.GetFeedsException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { BootMongoDBApp.class })
@@ -51,6 +53,22 @@ public class SourceControllerTest {
 		.andExpect(jsonPath("$[0].description").value("description"))
 		.andExpect(jsonPath("$[0].link").value("link"))
 		.andExpect(jsonPath("$[0].pubDate").value("pubDate"));
+		
+	}
+	
+	@Test
+	public void createSourceExRestTest() throws Exception {
+		String json = "{\"sourceURL\" : \"https://hnrss.org/newest\", "
+				+ "\"title\" : \"title\", "
+				+ "\"description\" : \"description\", "
+				+ "\"link\" : \"link\", "
+				+ "\"pubDate\" : \"pubDate\"}";
+		try {
+			this.mockMvc.perform(post("/sources/add").contentType(MediaType.APPLICATION_JSON).content(json)
+					.accept(MediaType.APPLICATION_JSON)).andExpect(status().is5xxServerError());
+		} catch (NestedServletException e) {
+		}
+		
 		
 	}
 	

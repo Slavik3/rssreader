@@ -84,7 +84,7 @@ public class FeedController {
 	}
 	
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	public void upload(@RequestParam(value = "source", required = false) String source) throws SyntaxException {
+	public void upload(@RequestParam(value = "source", required = false) String source) {
 		LOG.info("upload");
 		LOG.info("source==> " + source);
 		if(source==null || source.equals("undefined")){

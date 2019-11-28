@@ -28,15 +28,15 @@ import com.wordnik.swagger.annotations.ApiOperation;
 
 @Api(value = "sources", description = "Sourcs API")
 public class SourceController {
-	
+
 	private final Logger LOG = LoggerFactory.getLogger(getClass());
-	
+
 	@Autowired
 	private SourceRepository sourceRepository;
-	
+
 	@Autowired
 	private AddFeedsService addFeedsService;
-	
+
 	@ApiOperation(value = "Add new source")
 	@RequestMapping(value = "/sources/add", method = RequestMethod.POST)
 	public Source addSource(@RequestBody Source source) throws URISyntaxException, GetFeedsException {
@@ -47,30 +47,29 @@ public class SourceController {
 		source.setHostname(domain);
 		source.setIsActive(true);
 		Source src = sourceRepository.save(source);
-		List<NewsItem> feeds = addFeedsService.getFeeds(source.getHostname());//TODO 
-		if(feeds.size()==0) {
+		List<NewsItem> feeds = addFeedsService.getFeeds(source.getHostname());
+		if (feeds.size() == 0) {
 			System.out.println("GetFeedsException");
 			throw new GetFeedsException("Can not get feeds from " + source.getHostname());
 		}
 		return src;
 	}
-	
+
 	@RequestMapping(value = "/sources/getAll", method = RequestMethod.GET)
 	@ApiOperation(value = "Retrieves all sources")
 	public List<Source> getAllSources(@RequestParam(value = "source", required = false) String source) {
 		LOG.info("Retrieves all sources");
 		return sourceRepository.findAll();
 	}
-	
+
 	@RequestMapping(value = "/sources/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> delete(@PathVariable int id) {
 		LOG.info("delete source");
 		sourceRepository.deleteById(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
-	
-	@RequestMapping(value="/sources/{id}", method=RequestMethod.PUT)
+
+	@RequestMapping(value = "/sources/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> update(@RequestBody Source source) {
 		LOG.info("update source");
 		LOG.info(source.toString());

@@ -23,12 +23,7 @@ public class AddFeedsJob implements Job {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		System.out.println(formatter.format(date));
 		
-		try {
-			feedImporter.addFeeds();
-		} catch (SyntaxException e) {
-			e.printStackTrace();
-		}
-		System.out.println();
+		feedImporter.addFeeds();
 	}
 
 }

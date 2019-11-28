@@ -81,10 +81,16 @@ public class AddFeedsService {
 		return sourceURL;
 	}
 
-	public List<NewsItem> getFeeds() throws SyntaxException {
+	public List<NewsItem> getFeeds() {
 		List<NewsItem> allNewsFromRss = new ArrayList<NewsItem>();
 		for (int i = 0; i < getActiveSourceURLs().size(); i++) {
-			List<NewsItem> items = getNews(getActiveSourceURLs().get(i));
+			List<NewsItem> items = null;
+			try {
+				items = getNews(getActiveSourceURLs().get(i));
+			} catch (SyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			allNewsFromRss.addAll(items);
 		}
 		return allNewsFromRss;
@@ -109,7 +115,7 @@ public class AddFeedsService {
 		return allNewsFromRss;
 	}
 
-	public void addFeeds() throws SyntaxException {
+	public void addFeeds() {
 		log.info("addFeeds");
 		List<NewsItem> allNewsFromRss = getFeeds();
 		if (rssRepository.findAll().size() == 0) {
