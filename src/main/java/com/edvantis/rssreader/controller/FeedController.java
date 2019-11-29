@@ -45,9 +45,9 @@ public class FeedController {
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public List<NewsItem> getAllItems(@RequestParam(value = "source", required = false) String source) {
 		LOG.info("Getting all items.");
-		if(source==""){
+		if (source == "") {
 			return rssRepository.findAll();
-		}else if (source != null) {
+		} else if (source != null) {
 			return rssRepository.findBySource(source);
 		} else {
 			return rssRepository.findAll();
@@ -67,8 +67,7 @@ public class FeedController {
 		rssRepository.deleteById(itemId);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
-	
+
 	@LogExecutionTime
 	@RequestMapping(value = "/srcOfNews", method = RequestMethod.GET)
 	public Stream<String> getSrc() {
@@ -78,23 +77,20 @@ public class FeedController {
 			src.add(ni.get(i).getSource());
 		}
 		return src;*/
-		
-		return rssRepository.findAll().stream().map(item->item.getSource()).distinct();
+
+		return rssRepository.findAll().stream().map(item -> item.getSource()).distinct();
 	}
-	
+
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	public void upload(@RequestParam(value = "source", required = false) String source) {
 		LOG.info("upload");
 		LOG.info("source==> " + source);
-		if(source==null || source.equals("undefined")){
+		if (source == null || source.equals("undefined")) {
 			addFeedsService.addFeeds();
 		} else {
 			addFeedsService.addFeeds(source);
 		}
-		
+
 	}
-	
-	
-	
 
 }

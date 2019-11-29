@@ -7,24 +7,21 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-
 @Entity
 public class NewsItem implements Comparable<NewsItem> {
 
-	
-	
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String title;
 	private String description;
-    private String link;
-    private Date pub_date;
-    private String source;
+	private String link;
+	private Date pub_date;
+	private String source;
 	private Date creation_date = new Date();
-	
-	public NewsItem(){
-		
+
+	public NewsItem() {
+
 	}
 
 	public NewsItem(int id, String title, String description, String link, Date pubDate, String source,
@@ -39,7 +36,6 @@ public class NewsItem implements Comparable<NewsItem> {
 		this.creation_date = creation_date;
 	}
 
-
 	public int getId() {
 		return id;
 	}
@@ -49,12 +45,12 @@ public class NewsItem implements Comparable<NewsItem> {
 	}
 
 	public String getTitle() {
-        return title;
-    }
+		return title;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
 	public Date getCreationDate() {
 		return creation_date;
@@ -63,38 +59,38 @@ public class NewsItem implements Comparable<NewsItem> {
 	public void setCreationDate(Date creationDate) {
 		this.creation_date = creationDate;
 	}
-	
+
 	public String getDescription() {
-        return description;
-    }
+		return description;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public String getLink() {
-        return link;
-    }
+	public String getLink() {
+		return link;
+	}
 
-    public void setLink(String link) {
-        this.link = link;
-    }
+	public void setLink(String link) {
+		this.link = link;
+	}
 
-    public Date getPubDate() {
-        return pub_date;
-    }
+	public Date getPubDate() {
+		return pub_date;
+	}
 
-    public void setPubDate(Date pubDate) {
-        this.pub_date = pubDate;
-    }
-    
-    public String getSource() {
-        return source;
-    }
+	public void setPubDate(Date pubDate) {
+		this.pub_date = pubDate;
+	}
 
-    public void setSource(String source) {
-        this.source = source;
-    }
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
 
 	@Override
 	public String toString() {
@@ -144,10 +140,10 @@ public class NewsItem implements Comparable<NewsItem> {
 			return false;
 		return true;
 	}
-    
+
 	@Override
 	public int compareTo(NewsItem o) {
 		return getPubDate().compareTo(o.getPubDate());
 	}
-    
+
 }

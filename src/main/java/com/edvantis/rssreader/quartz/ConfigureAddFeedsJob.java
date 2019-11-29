@@ -18,9 +18,8 @@ public class ConfigureAddFeedsJob {
 
 	@Bean
 	public Trigger jobATrigger(JobDetail jobADetails) {
-		return TriggerBuilder.newTrigger().forJob(jobADetails)
-				.withIdentity("hour trigger").withSchedule(CronScheduleBuilder.cronSchedule("0 0 * ? * *"))
-				.build();
+		return TriggerBuilder.newTrigger().forJob(jobADetails).withIdentity("hour trigger")
+				.withSchedule(CronScheduleBuilder.cronSchedule("0 0 * ? * *")).build();
 	}
 
 }

@@ -84,10 +84,9 @@ public class AddFeedsService {
 		List<NewsItem> allNewsFromRss = new ArrayList<NewsItem>();
 		for (int i = 0; i < getActiveSourceURLs().size(); i++) {
 			List<NewsItem> items = null;
-			
-				items = getNews(getActiveSourceURLs().get(i));
-			
-				
+
+			items = getNews(getActiveSourceURLs().get(i));
+
 			allNewsFromRss.addAll(items);
 		}
 		return allNewsFromRss;
@@ -133,7 +132,7 @@ public class AddFeedsService {
 		log.info("addFeeds");
 		log.info(sourceURL);
 		List<NewsItem> allNewsFromRss = getFeeds(sourceURL);
-		
+
 		if (rssRepository.findAll().size() == 0) {
 			rssRepository.saveAll(allNewsFromRss);
 		} else {

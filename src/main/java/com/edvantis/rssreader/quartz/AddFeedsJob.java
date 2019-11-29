@@ -17,11 +17,11 @@ public class AddFeedsJob implements Job {
 
 	@Override
 	public void execute(JobExecutionContext arg0) {
-		
+
 		Date date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		System.out.println(formatter.format(date));
-		
+
 		feedImporter.addFeeds();
 	}
 
