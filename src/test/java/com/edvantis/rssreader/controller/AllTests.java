@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ FeedControllerTest.class, SourceControllerTest.class })
+@SuiteClasses({ FeedControllerTest.class, SourceControllerTest.class, FilterTest.class })
 public class AllTests {
 
 }
