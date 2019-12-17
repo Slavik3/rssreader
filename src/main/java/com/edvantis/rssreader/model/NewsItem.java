@@ -1,11 +1,18 @@
 package com.edvantis.rssreader.model;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 @Entity
 public class NewsItem implements Comparable<NewsItem> {
@@ -19,21 +26,23 @@ public class NewsItem implements Comparable<NewsItem> {
 	private Date pub_date;
 	private String source;
 	private Date creation_date = new Date();
+	private String html_body_detail;
 
 	public NewsItem() {
 
 	}
 
-	public NewsItem(int id, String title, String description, String link, Date pubDate, String source,
-			Date creation_date) {
+	public NewsItem(int id, String title, String description, String link, Date pub_date, String source,
+			Date creation_date, String html_body_detail) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.description = description;
 		this.link = link;
-		this.pub_date = pubDate;
+		this.pub_date = pub_date;
 		this.source = source;
 		this.creation_date = creation_date;
+		this.html_body_detail = html_body_detail;
 	}
 
 	public int getId() {
@@ -91,13 +100,22 @@ public class NewsItem implements Comparable<NewsItem> {
 	public void setSource(String source) {
 		this.source = source;
 	}
-
-	@Override
-	public String toString() {
-		return "ItemGen [id=" + id + ", title=" + title + ", description=" + description + ", link=" + link
-				+ ", pubDate=" + pub_date + ", source=" + source + ", creationDate=" + creation_date + "]";
+	
+	public String getHtml_body_detail() {
+		return html_body_detail;
 	}
 
+	public void setHtml_body_detail(String html_body_detail) {
+		this.html_body_detail = html_body_detail;
+	}
+	
+	@Override
+	public String toString() {
+		return "NewsItem [id=" + id + ", title=" + title + ", description=" + description + ", link=" + link
+				+ ", pub_date=" + pub_date + ", source=" + source + ", creation_date=" + creation_date
+				+ ", html_body_detail=" + html_body_detail + "]";
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -146,4 +164,16 @@ public class NewsItem implements Comparable<NewsItem> {
 		return getPubDate().compareTo(o.getPubDate());
 	}
 
+	public String getArticle(String link) throws IOException {
+		Document doc = Jsoup.connect(link).get();
+		Elements element = doc.getElementsByAttributeValue("class", "newsround-story-body__content").get(0).children();
+		String body = element.html();
+		
+		body = body.replaceAll("padding-bottom", "");
+		body = body.replaceAll("Getty Images", "");
+		body = body.replace("Let us know what you think about this big music row in the comments below.", "");
+		
+		return body;
+	}
+	
 }

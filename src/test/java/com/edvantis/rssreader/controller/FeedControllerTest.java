@@ -66,5 +66,19 @@ public class FeedControllerTest {
 				.andExpect(jsonPath("$[1].title").value("Eerie pictures show the sunken South London ship where the Beatles once played"))
 				.andExpect(status().isOk());
 	}
+	
+	/*@Test
+	public void getFeedBIdTest() throws Exception {
+		this.mockMvc.perform(get("/feeds/1"))
+				.andExpect(jsonPath("$[0].title").value("Police want to find this man suspected of sexual assault on Clapton bus"))
+				.andExpect(jsonPath("$[0].link").value("https://www.mylondon.news/news/east-london-news/police-want-find-man-suspected-16883138"))
+				.andExpect(status().isOk());
+	}*/
+	
+	@Test
+	public void uploadTest() throws Exception {
+		this.mockMvc.perform(post("/feeds/upload?source=mylondon.news"))
+		.andExpect(status().isOk());
+	}
 
 }

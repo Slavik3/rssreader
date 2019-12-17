@@ -57,7 +57,7 @@ public class SourceController {
 
 	@RequestMapping(value = "/sources/getAll", method = RequestMethod.GET)
 	@ApiOperation(value = "Retrieves all sources")
-	public List<Source> getAllSources(@RequestParam(value = "source", required = false) String source) {
+	public List<Source> getAllSources() {
 		LOG.info("Retrieves all sources");
 		return sourceRepository.findAll();
 	}
