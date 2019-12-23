@@ -166,12 +166,12 @@ public class NewsItem implements Comparable<NewsItem> {
 
 	public String getArticle(String link) throws IOException {
 		Document doc = Jsoup.connect(link).get();
-		Elements element = doc.getElementsByAttributeValue("class", "newsround-story-body__content").get(0).children();
+		Elements element = doc.getElementsByClass("article-body");// getElementsByTag("section"); //AttributeValue("class", "newsround-story-body__content").get(0).children();
 		String body = element.html();
 		
-		body = body.replaceAll("padding-bottom", "");
+		/*body = body.replaceAll("padding-bottom", "");
 		body = body.replaceAll("Getty Images", "");
-		body = body.replace("Let us know what you think about this big music row in the comments below.", "");
+		body = body.replace("Let us know what you think about this big music row in the comments below.", "");*/
 		
 		return body;
 	}

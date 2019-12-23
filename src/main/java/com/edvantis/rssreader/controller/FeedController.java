@@ -1,25 +1,29 @@
 package com.edvantis.rssreader.controller;
 
-import java.awt.Desktop;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,45 +31,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.edvantis.rssreader.annotation.LogExecutionTime;
 import com.edvantis.rssreader.model.NewsItem;
 import com.edvantis.rssreader.repository.RssRepository;
 import com.edvantis.rssreader.repository.RssRepository2;
 import com.edvantis.rssreader.services.AddFeedsService;
 import com.itextpdf.html2pdf.HtmlConverter;
-import com.pdfcrowd.Pdfcrowd;
 import com.wordnik.swagger.annotations.Api;
-
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-
-
-import java.io.FileInputStream;
-import java.io.OutputStream;
- 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
- 
-import javax.servlet.ServletContext;
- 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
- 
 
 
 @RestController
@@ -151,32 +123,53 @@ public class FeedController {
 		System.out.println(htmlBodyDetailFromDB);
 		String htmlBodyDetail = null;
 		if(htmlBodyDetailFromDB == null) {
-			//TODO get from site and save to DB
 			NewsItem ni = rssRepository2.findArticleById(id);
-			
-			System.out.println(ni);
 			htmlBodyDetail = ni.getArticle(ni.getLink());
 			ni.setHtml_body_detail(htmlBodyDetail);
 			rssRepository.save(ni);
+			return htmlBodyDetail;
+		} else {
+			return htmlBodyDetailFromDB;
 		}
-		return htmlBodyDetail;
+		
 	}
 	
-	@RequestMapping(value = "/savePDF/{id}", method = RequestMethod.GET)
-	public void savePDF(@PathVariable Integer id) throws IOException {
+	@RequestMapping(value = "/savePDF/{id}", method = RequestMethod.GET, produces = "application/pdf")
+	public ResponseEntity<byte[]> savePDF(@PathVariable Integer id) throws IOException {
 		LOG.info("savePDF");
 		String link = rssRepository2.findById(id).get().getLink();
-		String title = rssRepository2.findById(id).get().getTitle();
 		System.out.println(link);
 		
+		/*ChromeOptions options = new ChromeOptions();
+		options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200","--ignore-certificate-errors");
+		String exePath = "D:\\chromedriver.exe";
+    	System.setProperty("webdriver.chrome.driver", exePath);
+    	WebDriver driver = new ChromeDriver(options);
+    	driver.navigate().to("https://www.bbc.co.uk/newsround/50424586");
+    	System.out.println("==> ");
+    	System.out.println(driver.findElement(By.xpath("//section[@role='main']/section/div/div/div")).getAttribute("outerHTML"));*/
+    	
 		Document doc = Jsoup.connect(link).get();
-		Elements element = doc.getElementsByAttributeValue("class", "newsround-story-body__content").get(0).children();
+		Elements element = doc.getElementsByClass("article-body");//getElementsByAttributeValue("class", "newsround-story-body__content").get(0).children();
 		String body = element.text();
 		HtmlConverter.convertToPdf(body, new FileOutputStream(id+".pdf"));
 		
-		Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " + "D:\\rssreader\\"+id+".pdf");
-		
+		FileInputStream fileStream;
+        try {
+            fileStream = new FileInputStream(new File(id+".pdf"));
+            byte[] contents = IOUtils.toByteArray(fileStream);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType("application/pdf"));
+            String filename = "test.pdf";
+            headers.setContentDispositionFormData(filename, filename);
+            ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(contents, headers, HttpStatus.OK);
+            return response;
+        } catch (FileNotFoundException e) {
+           System.err.println(e);
+        } catch (IOException e) {
+            System.err.println(e);
+        }
+        return null;
 	}
-	
 
 }
