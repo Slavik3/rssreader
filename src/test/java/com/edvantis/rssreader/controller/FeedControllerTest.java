@@ -38,12 +38,15 @@ public class FeedControllerTest {
 	public void getFeedsRestTest() throws Exception {
 		String json = "{\"id\" : \"1\", "
 				+ "\"title\" : \"Police want to find this man suspected of sexual assault on Clapton bus\", "
+				+ "\"pubDate\" : \"2019-11-15T10:31:30.000+0000\", "
 				+ "\"link\" : \"https://www.mylondon.news/news/east-london-news/police-want-find-man-suspected-16883138\", \"source\" : \"mylondon.news\"}";
 		String json2 = "{\"id\" : \"2\", "
 				+ "\"title\" : \"Eerie pictures show the sunken South London ship where the Beatles once played\", "
+				+ "\"pubDate\" : \"2019-11-14T10:31:30.000+0000\", "
 				+ "\"link\" : \"https://www.mylondon.news/news/east-london-news/eerie-pictures-show-sunken-south-16870371\", \"source\" : \"mylondon.news\"}";
 		String json3 = "{\"id\" : \"3\", "
 				+ "\"title\" : \"Amber Rudd: Cabinet minister quits her job in the government\", "
+				+ "\"pubDate\" : \"2019-11-16T10:31:30.000+0000\", "
 				+ "\"link\" : \"http://www.bbc.co.uk/newsround/49626593\", \"source\" : \"bbc.co.uk\"}";
 		this.mockMvc.perform(post("/feeds/create").contentType(MediaType.APPLICATION_JSON).content(json)
 				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
@@ -67,9 +70,18 @@ public class FeedControllerTest {
 				.andExpect(status().isOk());
 	}
 	
+	@Test
+	public void getAllFeedRestTest() throws Exception {
+		this.mockMvc.perform(get("/feeds").param("source", ""))
+		.andExpect(jsonPath("$[0].title").value("Police want to find this man suspected of sexual assault on Clapton bus"))
+		.andExpect(jsonPath("$[1].title").value("Eerie pictures show the sunken South London ship where the Beatles once played"))
+		.andExpect(jsonPath("$[2].title").value("Amber Rudd: Cabinet minister quits her job in the government"))
+		.andExpect(status().isOk());
+	}
+	
 	/*@Test
 	public void getFeedBIdTest() throws Exception {
-		this.mockMvc.perform(get("/feeds/1"))
+		this.mockMvc.perform(get("/feeds").param("itemId", "1"))
 				.andExpect(jsonPath("$[0].title").value("Police want to find this man suspected of sexual assault on Clapton bus"))
 				.andExpect(jsonPath("$[0].link").value("https://www.mylondon.news/news/east-london-news/police-want-find-man-suspected-16883138"))
 				.andExpect(status().isOk());
@@ -77,8 +89,12 @@ public class FeedControllerTest {
 	
 	@Test
 	public void uploadTest() throws Exception {
-		this.mockMvc.perform(post("/feeds/upload?source=mylondon.news"))
+		this.mockMvc.perform(post("/feeds/upload"))
 		.andExpect(status().isOk());
 	}
+	
+	
+	
+	
 
 }

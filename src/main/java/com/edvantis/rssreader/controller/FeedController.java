@@ -20,6 +20,8 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -34,7 +36,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.edvantis.rssreader.annotation.LogExecutionTime;
 import com.edvantis.rssreader.model.NewsItem;
 import com.edvantis.rssreader.repository.RssRepository;
-import com.edvantis.rssreader.repository.RssRepository2;
 import com.edvantis.rssreader.services.AddFeedsService;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.wordnik.swagger.annotations.Api;
@@ -51,9 +52,6 @@ public class FeedController {
 	private RssRepository rssRepository;
 	
 	@Autowired
-	private RssRepository2 rssRepository2;
-	
-	@Autowired
 	private AddFeedsService addFeedsService;
 
 	@LogExecutionTime
@@ -65,27 +63,28 @@ public class FeedController {
 
 	@LogExecutionTime
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public List<NewsItem> getAllItems(@RequestParam(value = "source", required = false) String source) {
+	public Page<NewsItem> getAllItems(@RequestParam(value = "source", required = false) String source, 
+			@RequestParam(defaultValue="0") int page) {
 		LOG.info("Getting all items.");
 		if (source == "") {
-			return rssRepository.findAll();
+			return rssRepository.findAll(new PageRequest(page, 30));
 		} else if (source != null) {
-			return rssRepository.findBySource(source);
+			return rssRepository.findBySource(source, new PageRequest(page, 30));
 		} else {
-			return rssRepository.findAll();
+			return rssRepository.findAll(new PageRequest(page, 30));
 		}
 	}
 
 	@LogExecutionTime
 	@RequestMapping(value = "/{itemId}", method = RequestMethod.GET)
-	public Optional<NewsItem> getItem(@PathVariable String itemId) {
+	public Optional<NewsItem> getItem(@PathVariable Integer itemId) {
 		LOG.info("Getting item with ID: {}.", itemId);
 		return rssRepository.findById(itemId);
 	}
 
 	@LogExecutionTime
 	@RequestMapping(value = "/{itemId}", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deleteItem(@PathVariable String itemId) {
+	public ResponseEntity<?> deleteItem(@PathVariable Integer itemId) {
 		rssRepository.deleteById(itemId);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -119,11 +118,11 @@ public class FeedController {
 	public String openArticleFromDB(@PathVariable Integer id) throws IOException {
 		LOG.info("openArticleFromDB");
 		System.out.println("id==> " + id);
-		String htmlBodyDetailFromDB = rssRepository2.findById(id).get().getHtml_body_detail();
+		String htmlBodyDetailFromDB = rssRepository.findById(id).get().getHtml_body_detail();
 		System.out.println(htmlBodyDetailFromDB);
 		String htmlBodyDetail = null;
 		if(htmlBodyDetailFromDB == null) {
-			NewsItem ni = rssRepository2.findArticleById(id);
+			NewsItem ni = rssRepository.findArticleById(id);
 			htmlBodyDetail = ni.getArticle(ni.getLink());
 			ni.setHtml_body_detail(htmlBodyDetail);
 			rssRepository.save(ni);
@@ -137,7 +136,7 @@ public class FeedController {
 	@RequestMapping(value = "/savePDF/{id}", method = RequestMethod.GET, produces = "application/pdf")
 	public ResponseEntity<byte[]> savePDF(@PathVariable Integer id) throws IOException {
 		LOG.info("savePDF");
-		String link = rssRepository2.findById(id).get().getLink();
+		String link = rssRepository.findById(id).get().getLink();
 		System.out.println(link);
 		
 		/*ChromeOptions options = new ChromeOptions();
@@ -160,9 +159,8 @@ public class FeedController {
             byte[] contents = IOUtils.toByteArray(fileStream);
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.parseMediaType("application/pdf"));
-            String filename = "test.pdf";
-            headers.setContentDispositionFormData(filename, filename);
             ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(contents, headers, HttpStatus.OK);
+            System.out.println("==> " + response);
             return response;
         } catch (FileNotFoundException e) {
            System.err.println(e);
@@ -171,5 +169,7 @@ public class FeedController {
         }
         return null;
 	}
+	
+	
 
 }
