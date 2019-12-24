@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -39,6 +40,9 @@ import com.edvantis.rssreader.repository.RssRepository;
 import com.edvantis.rssreader.services.AddFeedsService;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.wordnik.swagger.annotations.Api;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+
 
 
 @RestController
@@ -64,14 +68,29 @@ public class FeedController {
 	@LogExecutionTime
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public Page<NewsItem> getAllItems(@RequestParam(value = "source", required = false) String source, 
+			@RequestParam(value = "title", required = false) String title,
+			@RequestParam(value = "sortTableByPublicationDate", required = false) String sortTableByPublicationDate,
 			@RequestParam(defaultValue="0") int page) {
 		LOG.info("Getting all items.");
-		if (source == "") {
-			return rssRepository.findAll(new PageRequest(page, 30));
-		} else if (source != null) {
-			return rssRepository.findBySource(source, new PageRequest(page, 30));
-		} else {
-			return rssRepository.findAll(new PageRequest(page, 30));
+		System.out.println("title " + title);
+		System.out.println("source " + source);
+		System.out.println("sortTableByPublicationDatee " + sortTableByPublicationDate);
+		if(sortTableByPublicationDate.equals("ASC")) {
+			return rssRepository.findAll(PageRequest.of(page, 30, Sort.by(Direction.ASC, "pubDate")));
+		}
+		if(sortTableByPublicationDate.equals("DESC")) {
+			return rssRepository.findAll(PageRequest.of(page, 30, Sort.by(Direction.DESC, "pubDate")));
+		}
+		if(!title.equals("undefined") && !source.equals("undefined")) {
+			System.out.println(3);
+			return rssRepository.findBySourceAndTitle(source, title, PageRequest.of(page, 30));
+		}
+		if(!source.equals("undefined")) {
+			System.out.println("2");
+			return rssRepository.findBySource(source, PageRequest.of(page, 30));
+		}
+		else { //(title==null && source.equals("undefined"))
+			return rssRepository.findAll(PageRequest.of(page, 30));
 		}
 	}
 
@@ -119,7 +138,6 @@ public class FeedController {
 		LOG.info("openArticleFromDB");
 		System.out.println("id==> " + id);
 		String htmlBodyDetailFromDB = rssRepository.findById(id).get().getHtml_body_detail();
-		System.out.println(htmlBodyDetailFromDB);
 		String htmlBodyDetail = null;
 		if(htmlBodyDetailFromDB == null) {
 			NewsItem ni = rssRepository.findArticleById(id);

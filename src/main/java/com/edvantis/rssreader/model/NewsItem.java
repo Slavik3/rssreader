@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,7 +24,8 @@ public class NewsItem implements Comparable<NewsItem> {
 	private String title;
 	private String description;
 	private String link;
-	private Date pub_date;
+	@Column(name="pub_date")
+	private Date pubDate;
 	private String source;
 	private Date creation_date = new Date();
 	private String html_body_detail;
@@ -39,7 +41,7 @@ public class NewsItem implements Comparable<NewsItem> {
 		this.title = title;
 		this.description = description;
 		this.link = link;
-		this.pub_date = pub_date;
+		this.pubDate = pub_date;
 		this.source = source;
 		this.creation_date = creation_date;
 		this.html_body_detail = html_body_detail;
@@ -86,11 +88,11 @@ public class NewsItem implements Comparable<NewsItem> {
 	}
 
 	public Date getPubDate() {
-		return pub_date;
+		return pubDate;
 	}
 
 	public void setPubDate(Date pubDate) {
-		this.pub_date = pubDate;
+		this.pubDate = pubDate;
 	}
 
 	public String getSource() {
@@ -112,7 +114,7 @@ public class NewsItem implements Comparable<NewsItem> {
 	@Override
 	public String toString() {
 		return "NewsItem [id=" + id + ", title=" + title + ", description=" + description + ", link=" + link
-				+ ", pub_date=" + pub_date + ", source=" + source + ", creation_date=" + creation_date
+				+ ", pub_date=" + pubDate + ", source=" + source + ", creation_date=" + creation_date
 				+ ", html_body_detail=" + html_body_detail + "]";
 	}
 	
@@ -122,7 +124,7 @@ public class NewsItem implements Comparable<NewsItem> {
 		int result = 1;
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((link == null) ? 0 : link.hashCode());
-		result = prime * result + ((pub_date == null) ? 0 : pub_date.hashCode());
+		result = prime * result + ((pubDate == null) ? 0 : pubDate.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		return result;
 	}
@@ -146,10 +148,10 @@ public class NewsItem implements Comparable<NewsItem> {
 				return false;
 		} else if (!link.equals(other.link))
 			return false;
-		if (pub_date == null) {
-			if (other.pub_date != null)
+		if (pubDate == null) {
+			if (other.pubDate != null)
 				return false;
-		} else if (!pub_date.equals(other.pub_date))
+		} else if (!pubDate.equals(other.pubDate))
 			return false;
 		if (title == null) {
 			if (other.title != null)
