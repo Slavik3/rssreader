@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -67,29 +69,40 @@ public class FeedController {
 
 	@LogExecutionTime
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public Page<NewsItem> getAllItems(@RequestParam(value = "source", required = false) String source, 
+	public Page<NewsItem> getAllItems(@RequestParam(value = "source", required = false) String source,
 			@RequestParam(value = "title", required = false) String title,
 			@RequestParam(value = "sortTableByPublicationDate", required = false) String sortTableByPublicationDate,
-			@RequestParam(defaultValue="0") int page) {
+			@RequestParam(value = "dateFrom", required = false) String dateFrom,
+			@RequestParam(value = "dateTo", required = false) String dateTo, @RequestParam(defaultValue = "0") int page)
+			throws ParseException {
 		LOG.info("Getting all items.");
 		System.out.println("title " + title);
 		System.out.println("source " + source);
 		System.out.println("sortTableByPublicationDatee " + sortTableByPublicationDate);
-		if(sortTableByPublicationDate.equals("ASC")) {
+		System.out.println("dateFrom " + dateFrom);
+		System.out.println("dateTo " + dateTo);
+		SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd");
+
+		if ((!dateFrom.equals("undefined"))) {
+			System.out.println("date");
+			return rssRepository.findAllByPubDateBetween(formatter1.parse(dateFrom), formatter1.parse(dateTo), PageRequest.of(page, 30));
+		}
+		if (sortTableByPublicationDate.equals("ASC")) {
+			System.out.println("ASC");
 			return rssRepository.findAll(PageRequest.of(page, 30, Sort.by(Direction.ASC, "pubDate")));
 		}
-		if(sortTableByPublicationDate.equals("DESC")) {
+		if (sortTableByPublicationDate.equals("DESC")) {
+			System.out.println("DESC");
 			return rssRepository.findAll(PageRequest.of(page, 30, Sort.by(Direction.DESC, "pubDate")));
 		}
-		if(!title.equals("undefined") && !source.equals("undefined")) {
-			System.out.println(3);
+		if (!title.equals("undefined") && !source.equals("undefined")) {
+			System.out.println("source, title");
 			return rssRepository.findBySourceAndTitle(source, title, PageRequest.of(page, 30));
 		}
-		if(!source.equals("undefined")) {
-			System.out.println("2");
+		if (!source.equals("undefined")) {
+			System.out.println("source");
 			return rssRepository.findBySource(source, PageRequest.of(page, 30));
-		}
-		else { //(title==null && source.equals("undefined"))
+		} else { // (title==null && source.equals("undefined"))
 			return rssRepository.findAll(PageRequest.of(page, 30));
 		}
 	}
@@ -130,7 +143,6 @@ public class FeedController {
 		} else {
 			addFeedsService.addFeeds(source);
 		}
-
 	}
 	
 	@RequestMapping(value = "/openArticleFromDB/{id}", method = RequestMethod.GET)
