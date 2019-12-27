@@ -11,20 +11,18 @@ import com.edvantis.rssreader.model.NewsItem;
 
 public class NewsWithTitle implements Specification<NewsItem> {
 	private String title;
-	
-	
+
 	public NewsWithTitle(String title) {
 		super();
 		this.title = title;
 	}
 
-
 	@Override
 	public Predicate toPredicate(Root<NewsItem> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 		if (title.equals("undefined")) {
-            return criteriaBuilder.isTrue(criteriaBuilder.literal(true)); 
-        }
-        return criteriaBuilder.like(root.get("title"), this.title);
+			return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
+		}
+		return criteriaBuilder.like(root.get("title"), this.title);
 	}
 
 }

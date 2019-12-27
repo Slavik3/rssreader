@@ -12,21 +12,18 @@ import com.edvantis.rssreader.model.NewsItem;
 public class NewsWithSource implements Specification<NewsItem> {
 
 	private String source;
-	
-	
+
 	public NewsWithSource(String source) {
 		super();
 		this.source = source;
 	}
 
-
-
 	@Override
 	public Predicate toPredicate(Root<NewsItem> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 		if (source.equals("undefined")) {
-            return criteriaBuilder.isTrue(criteriaBuilder.literal(true)); 
-        }
-        return criteriaBuilder.equal(root.get("source"), this.source);
+			return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
+		}
+		return criteriaBuilder.equal(root.get("source"), this.source);
 	}
 
 }
