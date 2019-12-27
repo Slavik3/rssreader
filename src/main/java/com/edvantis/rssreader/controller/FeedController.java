@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -40,11 +41,16 @@ import com.edvantis.rssreader.annotation.LogExecutionTime;
 import com.edvantis.rssreader.model.NewsItem;
 import com.edvantis.rssreader.repository.RssRepository;
 import com.edvantis.rssreader.services.AddFeedsService;
+import com.edvantis.rssreader.specification.NewsWithDateFrom;
+import com.edvantis.rssreader.specification.NewsWithDateTo;
+import com.edvantis.rssreader.specification.NewsWithSource;
+import com.edvantis.rssreader.specification.NewsWithTitle;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.wordnik.swagger.annotations.Api;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 
 
 @RestController
@@ -59,6 +65,8 @@ public class FeedController {
 	
 	@Autowired
 	private AddFeedsService addFeedsService;
+	
+	final int size = 300;
 
 	@LogExecutionTime
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -69,43 +77,54 @@ public class FeedController {
 
 	@LogExecutionTime
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public Page<NewsItem> getAllItems(@RequestParam(value = "source", required = false) String source,
+	public Page<NewsItem> getAllItems(
+			@RequestParam(value = "source", required = false) String source,
 			@RequestParam(value = "title", required = false) String title,
 			@RequestParam(value = "sortTableByPublicationDate", required = false) String sortTableByPublicationDate,
 			@RequestParam(value = "dateFrom", required = false) String dateFrom,
-			@RequestParam(value = "dateTo", required = false) String dateTo, @RequestParam(defaultValue = "0") int page)
+			@RequestParam(value = "dateTo", required = false) String dateTo, @RequestParam(defaultValue = "0") int page, Pageable pageable)
 			throws ParseException {
 		LOG.info("Getting all items.");
-		System.out.println("title " + title);
-		System.out.println("source " + source);
-		System.out.println("sortTableByPublicationDatee " + sortTableByPublicationDate);
-		System.out.println("dateFrom " + dateFrom);
-		System.out.println("dateTo " + dateTo);
+		
 		SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd");
-
-		if ((!dateFrom.equals("undefined"))) {
-			System.out.println("date");
-			return rssRepository.findAllByPubDateBetween(formatter1.parse(dateFrom), formatter1.parse(dateTo), PageRequest.of(page, 30));
+		
+		Date dateFromD = null; 
+		Date dateToD = null;
+		if(!dateFrom.equals("undefined")) {
+			dateFromD = formatter1.parse(dateFrom);
 		}
+		if(!dateTo.equals("undefined")) {
+			dateToD = formatter1.parse(dateTo);
+		}
+		Specification<NewsItem> spec = Specifications.where(new NewsWithTitle(title))
+                .and(new NewsWithSource(source))
+                .and(new NewsWithDateFrom(dateFromD))
+                .and(new NewsWithDateTo(dateToD));
+		rssRepository.findAll(PageRequest.of(page, size, Sort.by(Direction.DESC, "pubDate")));
+		Page<NewsItem> ttt = rssRepository.findAll(spec, pageable);
+		return rssRepository.findAll(spec, pageable);//pageable	
+	}
+	
+	@RequestMapping(value = "/all", method = RequestMethod.GET)
+	public Page<NewsItem> getAllItems(@RequestParam(defaultValue = "0") int page) throws ParseException {
+		return rssRepository.findAll(PageRequest.of(page, size));
+	}
+	
+	@RequestMapping(value = "/sort", method = RequestMethod.GET)
+	public Page<NewsItem> getAllItemsSort(@RequestParam(defaultValue = "0") int page, 
+			@RequestParam(value = "sortTableByPublicationDate", required = false) String sortTableByPublicationDate) throws ParseException {
+		System.out.println("sort");
 		if (sortTableByPublicationDate.equals("ASC")) {
 			System.out.println("ASC");
-			return rssRepository.findAll(PageRequest.of(page, 30, Sort.by(Direction.ASC, "pubDate")));
+			return rssRepository.findAll(PageRequest.of(page, size, Sort.by(Direction.ASC, "pubDate")));
 		}
-		if (sortTableByPublicationDate.equals("DESC")) {
+		else {
 			System.out.println("DESC");
-			return rssRepository.findAll(PageRequest.of(page, 30, Sort.by(Direction.DESC, "pubDate")));
+			return rssRepository.findAll(PageRequest.of(page, size, Sort.by(Direction.DESC, "pubDate")));
 		}
-		if (!title.equals("undefined") && !source.equals("undefined")) {
-			System.out.println("source, title");
-			return rssRepository.findBySourceAndTitle(source, title, PageRequest.of(page, 30));
-		}
-		if (!source.equals("undefined")) {
-			System.out.println("source");
-			return rssRepository.findBySource(source, PageRequest.of(page, 30));
-		} else { // (title==null && source.equals("undefined"))
-			return rssRepository.findAll(PageRequest.of(page, 30));
-		}
+		
 	}
+
 
 	@LogExecutionTime
 	@RequestMapping(value = "/{itemId}", method = RequestMethod.GET)
