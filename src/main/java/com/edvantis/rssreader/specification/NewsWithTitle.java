@@ -19,7 +19,7 @@ public class NewsWithTitle implements Specification<NewsItem> {
 
 	@Override
 	public Predicate toPredicate(Root<NewsItem> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-		if (title.equals("undefined")) {
+		if (title.equals("undefined") || title.equals("")) {
 			return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
 		}
 		return criteriaBuilder.like(root.get("title"), this.title);

@@ -59,7 +59,7 @@ public class FeedController {
 	@Autowired
 	private AddFeedsService addFeedsService;
 
-	final int size = 40;
+	final int size = 20;
 
 	@LogExecutionTime
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -73,11 +73,12 @@ public class FeedController {
 	public Page<NewsItem> getAllItems(@RequestParam(value = "source", required = false) String source,
 			@RequestParam(value = "title", required = false) String title,
 			@RequestParam(value = "sortTableByPublicationDate", required = false) String sortTableByPublicationDate,
+			@RequestParam(value = "changeSort", required = false) boolean changeSort,
 			@RequestParam(value = "dateFrom", required = false) String dateFrom,
 			@RequestParam(value = "dateTo", required = false) String dateTo, @RequestParam(defaultValue = "0") int page,
 			Pageable pageable) throws ParseException {
 		LOG.info("Getting all items.");
-
+		
 		SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd");
 
 		Date dateFromD = null;
@@ -92,11 +93,9 @@ public class FeedController {
 				.and(new NewsWithDateFrom(dateFromD)).and(new NewsWithDateTo(dateToD));
 		rssRepository.findAll(PageRequest.of(page, size, Sort.by(Direction.DESC, "pubDate")));
 
-		if (sortTableByPublicationDate.equals("ASC")) {
-			System.out.println("ASC");
+		if (sortTableByPublicationDate.equals("ASC") && changeSort==true) {
 			pageable = PageRequest.of(0, size, Sort.by(Order.asc("pubDate")));
-		} else {
-			System.out.println("DESC");
+		} else if(sortTableByPublicationDate.equals("DESC") && changeSort==true) {
 			pageable = PageRequest.of(0, size, Sort.by(Order.desc("pubDate")));
 		}
 		return rssRepository.findAll(spec, pageable);
