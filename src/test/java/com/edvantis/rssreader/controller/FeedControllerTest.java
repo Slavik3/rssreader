@@ -8,7 +8,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.edvantis.rssreader.BootMongoDBApp;
+import com.edvantis.rssreader.Rssreader;
 
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -20,7 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { BootMongoDBApp.class })
+@SpringBootTest(classes = { Rssreader.class })
 @WebAppConfiguration
 public class FeedControllerTest {
 

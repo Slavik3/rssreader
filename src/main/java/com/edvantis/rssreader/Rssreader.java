@@ -7,10 +7,10 @@ import com.mangofactory.swagger.plugin.EnableSwagger;
 
 @SpringBootApplication
 @EnableSwagger
-public class BootMongoDBApp {
+public class Rssreader {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BootMongoDBApp.class, args);
+		SpringApplication.run(Rssreader.class, args);
 	}
 
 }

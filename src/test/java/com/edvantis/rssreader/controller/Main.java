@@ -2,11 +2,11 @@ package com.edvantis.rssreader.controller;
 
 import org.junit.Test;
 
-import com.edvantis.rssreader.BootMongoDBApp;
+import com.edvantis.rssreader.Rssreader;
 
 public class Main {
 	@Test
 	public void main() {
-		BootMongoDBApp.main(new String[] {});
+		Rssreader.main(new String[] {});
 	}
 }

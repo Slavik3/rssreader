@@ -16,11 +16,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.edvantis.rssreader.BootMongoDBApp;
+import com.edvantis.rssreader.Rssreader;
 import com.edvantis.rssreader.filter.SimpleCORSFilter;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { BootMongoDBApp.class })
+@SpringBootTest(classes = { Rssreader.class })
 @WebAppConfiguration
 public class FilterTest {
 

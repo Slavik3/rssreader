@@ -5,6 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -78,7 +81,7 @@ public class FeedController {
 			@RequestParam(value = "dateTo", required = false) String dateTo, @RequestParam(defaultValue = "0") int page,
 			Pageable pageable) throws ParseException {
 		LOG.info("Getting all items.");
-		
+
 		SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd");
 
 		Date dateFromD = null;
@@ -93,9 +96,9 @@ public class FeedController {
 				.and(new NewsWithDateFrom(dateFromD)).and(new NewsWithDateTo(dateToD));
 		rssRepository.findAll(PageRequest.of(page, size, Sort.by(Direction.DESC, "pubDate")));
 
-		if (sortTableByPublicationDate.equals("ASC") && changeSort==true) {
+		if (sortTableByPublicationDate.equals("ASC") && changeSort == true) {
 			pageable = PageRequest.of(0, size, Sort.by(Order.asc("pubDate")));
-		} else if(sortTableByPublicationDate.equals("DESC") && changeSort==true) {
+		} else if (sortTableByPublicationDate.equals("DESC") && changeSort == true) {
 			pageable = PageRequest.of(0, size, Sort.by(Order.desc("pubDate")));
 		}
 		return rssRepository.findAll(spec, pageable);
@@ -157,11 +160,14 @@ public class FeedController {
 	@RequestMapping(value = "/savePDF/{id}", method = RequestMethod.GET, produces = "application/pdf")
 	public ResponseEntity<byte[]> savePDF(@PathVariable Integer id) throws IOException {
 		LOG.info("savePDF");
-		String link = rssRepository.findById(id).get().getLink();
-		Document doc = Jsoup.connect(link).get();
-		Elements element = doc.getElementsByClass("article-body");
-		String body = element.text();
-		HtmlConverter.convertToPdf(body, new FileOutputStream(id + ".pdf"));
+		Path path = Paths.get(id + ".pdf");
+		if (!Files.exists(path)) {
+			String link = rssRepository.findById(id).get().getLink();
+			Document doc = Jsoup.connect(link).get();
+			Elements element = doc.getElementsByClass("article-body");
+			String body = element.text();
+			HtmlConverter.convertToPdf(body, new FileOutputStream(id + ".pdf"));// FileOutputStream--> toResp
+		}
 
 		FileInputStream fileStream;
 		try {

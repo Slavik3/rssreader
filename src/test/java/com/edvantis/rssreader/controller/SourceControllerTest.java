@@ -20,12 +20,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
-import com.edvantis.rssreader.BootMongoDBApp;
+import com.edvantis.rssreader.Rssreader;
 
 import static org.hamcrest.Matchers.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { BootMongoDBApp.class })
+@SpringBootTest(classes = { Rssreader.class })
 @WebAppConfiguration
 public class SourceControllerTest {
 	
